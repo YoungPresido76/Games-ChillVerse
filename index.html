@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Idle Verses - Chill Verse Group Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <main id="app" role="main">
+    <!-- Login Screen -->
+    <section id="login" class="screen active" aria-labelledby="login-title">
+      <header>
+        <h1 id="login-title" class="title">Idle Verses</h1>
+        <p>Join the Chill Verse idle challenge!</p>
+      </header>
+      <form id="login-form" novalidate>
+        <label for="player-name">Player Name</label>
+        <input type="text" id="player-name" required minlength="2" maxlength="20" aria-describedby="name-help">
+        <small id="name-help">Your display name</small>
+
+        <label for="player-phone">WhatsApp Number</label>
+        <input type="tel" id="player-phone" required pattern="\+?[1-9]\d{1,14}" placeholder="+2348012345678" aria-describedby="phone-help">
+        <small id="phone-help">Full number for leaderboard sync</small>
+
+        <button type="submit" class="btn-primary">Login & Start</button>
+      </form>
+    </section>
+
+    <!-- Loading Screen -->
+    <section id="loading" class="screen" aria-label="Loading">
+      <div class="loader">
+        <div class="spinner"></div>
+        <p>Setting up player logs...</p>
+        <p id="logged-as" hidden>Logged in as <strong></strong></p>
+      </div>
+    </section>
+
+    <!-- Main Game Screen -->
+    <section id="main" class="screen" hidden>
+      <header class="game-header">
+        <h1 class="title">Idle Verses</h1>
+      </header>
+      <div class="layout">
+        <!-- Left: Dashboard Nav -->
+        <nav id="dashboard" class="dashboard" aria-label="Game Sections" role="tablist">
+          <button role="tab" data-tab="verses" class="tab active" aria-selected="true">Verses</button>
+          <button role="tab" data-tab="leaderboard" class="tab">Leaderboard</button>
+          <button role="tab" data-tab="achievements" class="tab">Achievements</button>
+          <button role="tab" data-tab="earn" class="tab">Earn</button>
+        </nav>
+
+        <!-- Center: Content -->
+        <div id="content" class="content">
+          <!-- Verses Tab -->
+          <article id="verses-tab" class="tab-panel active" role="tabpanel">
+            <div class="resources">
+              <div class="resource">
+                <h3>Drops</h3>
+                <div class="amount"><span id="drops">0</span></div>
+                <div class="total">Total: <span id="total-drops">0</span></div>
+              </div>
+              <div class="resource">
+                <h3>Chill</h3>
+                <div class="amount"><span id="chill">0</span></div>
+                <div class="total">Total: <span id="total-chill">0</span></div>
+              </div>
+              <div class="resource">
+                <h3>Insp</h3>
+                <div class="amount"><span id="insp">0</span></div>
+                <div class="total">Total: <span id="total-insp">0</span></div>
+              </div>
+              <div class="resource">
+                <h3>ChillVerse</h3>
+                <div class="amount"><span id="chillverse-game">0</span></div>
+              </div>
+            </div>
+            <div class="buyers">
+              <button id="click-btn" class="click-btn" aria-label="Harvest Drops">❄️ Harvest</button>
+              <button id="buy-flake" class="btn-buy" disabled>Flake (10)</button>
+              <button id="buy-chillgen" class="btn-buy" disabled>Chill Gen (100)</button>
+              <button id="buy-revel" class="btn-buy" disabled>Revel (1e6)</button>
+              <button id="buy-verse" class="btn-buy" disabled>Verse (1e12)</button>
+              <div class="prestiges">
+                <button id="prestige-cold" class="btn-prestige" disabled>Cold Prestige (Req: 1e21 Drops)</button>
+                <button id="prestige-insp" class="btn-prestige" disabled>Insp Prestige (Req: 1e30 Chill)</button>
+                <button id="prestige-script" class="btn-prestige" disabled>Script Prestige (Req: 1e40 Insp)</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Leaderboard Tab -->
+          <article id="leaderboard-tab" class="tab-panel" role="tabpanel">
+            <h2>Top 3 ChillVerse</h2>
+            <table id="leaderboard" class="leader-table" aria-label="Leaderboard">
+              <thead><tr><th>Rank</th><th>Player</th><th>ChillVerse</th><th>Last Update</th></tr></thead>
+              <tbody></tbody>
+            </table>
+            <p>Updates every 10s realtime.</p>
+          </article>
+
+          <!-- Achievements Tab -->
+          <article id="achievements-tab" class="tab-panel" role="tabpanel">
+            <h2>Achievements (15 total)</h2>
+            <div id="achievements-grid" class="ach-grid"></div>
+          </article>
+
+          <!-- Earn Tab -->
+          <article id="earn-tab" class="tab-panel" role="tabpanel">
+            <h2>Earn Diamonds</h2>
+            <p>Convert Chill to Diamonds: 1000 Chill = 100 Diamonds</p>
+            <div class="earn-info">
+              <div>Available Chill: <span id="earn-chill">0</span></div>
+              <button id="convert-btn" class="btn-primary" disabled>Convert Now</button>
+            </div>
+          </article>
+        </div>
+
+        <!-- Right: Profile -->
+        <aside id="profile" class="profile" aria-label="User Profile">
+          <div class="avatar" id="avatar"></div>
+          <h3 id="profile-name"></h3>
+          <p id="profile-phone"></p>
+          <div class="chillverse-profile">ChillVerse: <span id="chillverse-profile">0</span></div>
+          <button id="logout-btn" class="btn-secondary">Logout</button>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- Screenshot Modal -->
+  <dialog id="screenshot-modal" class="modal">
+    <div>
+      <h3>Conversion Complete!</h3>
+      <p id="convert-msg"></p>
+      <p>Screenshot this and send to Vicbot in chat to redeem.</p>
+      <button id="close-modal" class="btn-primary">Close</button>
+    </div>
+  </dialog>
+
+  <!-- Firebase + Scripts -->
+  <script type="module" src="js/main.js"></script>
+</body>
+  </html>
