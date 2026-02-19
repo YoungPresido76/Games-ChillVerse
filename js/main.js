@@ -1,5 +1,5 @@
 // js/main.js – Entry point, auth, game loop, particles
-import { auth, db, playerRef, signInAnonymously, onAuthStateChanged, ref, onValue, set, query, orderByChild, limitToLast } from './firebase.js';
+import { auth, db, playerRef, isOnline } from './firebase.js';
 import { loadGame, saveGame, tick, updateAchievements } from './game.js';
 import { updateUI, initEventListeners, formatNumber } from './ui.js';
 
@@ -45,21 +45,21 @@ function initParticles() {
 }
 
 // Auth & player flow
-onAuthStateChanged(auth, async (user) => {
+firebase.auth().onAuthStateChanged(async (user) => {
   if (user) {
-    // Already signed in or just signed in
+    console.log('User signed in:', user.uid);
     document.getElementById('login').classList.remove('active');
     document.getElementById('loading').classList.add('active');
 
-    // Load or create player data
-    playerRef = ref(db, `players/${game.phone || 'new'}`);
-    onValue(playerRef, (snap) => {
+    // Dynamic ref (no exported ref function needed)
+    playerRef = firebase.database().ref(`players/${game.phone || 'new'}`);
+
+    playerRef.on('value', (snap) => {
       const data = snap.val();
       if (data) {
         loadGame(data);
       } else {
-        // New player – already set name/phone in login
-        saveGame();
+        saveGame(); // creates initial data
       }
       document.getElementById('logged-as').hidden = false;
       document.getElementById('logged-as').querySelector('strong').textContent = game.name;
@@ -67,17 +67,17 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById('loading').classList.remove('active');
         document.getElementById('main').classList.add('active');
         updateUI();
-      }, 3000); // fake 3s remaining of 5s
+      }, 3000);
     });
-
-    // Leaderboard realtime
-    const lbQuery = query(ref(db, 'leaderboard'), orderByChild('chillverse'), limitToLast(3));
-    onValue(lbQuery, (snap) => {
+    
+    // Leaderboard (namespaced query style – simpler)
+    const lbRef = firebase.database().ref('leaderboard');
+    lbRef.orderByChild('chillverse').limitToLast(3).on('value', (snap) => {
       const tbody = document.querySelector('#leaderboard tbody');
       tbody.innerHTML = '';
       const entries = [];
       snap.forEach(child => entries.push(child.val()));
-      entries.sort((a,b) => b.chillverse - a.chillverse);
+      entries.sort((a, b) => b.chillverse - a.chillverse);
       entries.forEach((entry, i) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -89,10 +89,12 @@ onAuthStateChanged(auth, async (user) => {
         tbody.appendChild(tr);
       });
     });
+  } else {
+    console.log('No user signed in');
   }
 });
 
-// Login form
+// Login form handler (namespaced signInAnonymously)
 document.getElementById('login-form').addEventListener('submit', async e => {
   e.preventDefault();
   const name = document.getElementById('player-name').value.trim();
@@ -104,16 +106,24 @@ document.getElementById('login-form').addEventListener('submit', async e => {
   }
 
   game.name = name;
-  game.phone = phone.replace(/\D/g, ''); // normalize
+  game.phone = phone.replace(/\D/g, '');
 
   try {
-    await signInAnonymously(auth);
-    // onAuthStateChanged will handle the rest
+    console.log('Attempting anonymous sign-in...');
+    await firebase.auth().signInAnonymously();
+    console.log('Anonymous sign-in successful');
   } catch (err) {
-    console.error(err);
-    alert('Login failed. Try again.');
+    console.error('Sign-in failed:', err.code, err.message);
+    alert('Login error: ' + (err.message || 'Unknown error'));
   }
 });
+
+// Logout (update if you have logout logic)
+document.getElementById('logout-btn').onclick = () => {
+  if (confirm('Logout? Progress is saved.')) {
+    firebase.auth().signOut().then(() => location.reload());
+  }
+};
 
 // Game loop
 setInterval(() => {
