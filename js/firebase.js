@@ -1,9 +1,8 @@
-// js/firebase.js – Compat (v8-style) for easier compatibility
+// js/firebase.js – Full compat / namespaced style (v10 compat)
 
-// Use compat libraries (older syntax)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js";
-import { getAuth, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js";
-import { getDatabase, ref, set, onValue, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js";
+import firebase from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js";
+import "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js";
+import "https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOyREKMNxq2hyoR44VOVzQKTwXJo944TU",
@@ -14,11 +13,13 @@ const firebaseConfig = {
   appId: "1:505706463284:web:0242bfc389ba8278780a61"
 };
 
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getDatabase(app);
+// Initialize Firebase (namespaced style)
+firebase.initializeApp(firebaseConfig);
 
-// No change needed for these exports
+// Exports using legacy namespace
+export const auth = firebase.auth();
+export const db = firebase.database();
+
+// No playerRef here – we'll create it dynamically in main.js
 export let playerRef = null;
-export let leaderboardQuery = null;
 export let isOnline = true;
