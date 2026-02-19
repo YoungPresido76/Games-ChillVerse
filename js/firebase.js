@@ -1,7 +1,9 @@
-// Firebase Init (ESM)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getAuth, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-import { getDatabase, ref, set, onValue, query, orderByChild, limitToLast, goOffline, goOnline } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+// js/firebase.js – Compat (v8-style) for easier compatibility
+
+// Use compat libraries (older syntax)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js";
+import { getAuth, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js";
+import { getDatabase, ref, set, onValue, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOyREKMNxq2hyoR44VOVzQKTwXJo944TU",
@@ -16,7 +18,7 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
-// Exports for main
+// No change needed for these exports
 export let playerRef = null;
 export let leaderboardQuery = null;
-export let isOnline = true; // For offline fallback
+export let isOnline = true;
