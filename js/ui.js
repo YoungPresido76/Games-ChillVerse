@@ -1,5 +1,4 @@
-// js/ui.js – UI rendering & event binding helpers
-import { formatNumber } from './ui.js';  // self-reference ok for helpers
+// js/ui.js – UI rendering & event binding helpers 
 import {
   clickHarvest, buyFlake, buyChillGen, buyRevel, buyVerse,
   prestigeCold, prestigeInsp, prestigeScript, convertChill,
