@@ -144,6 +144,25 @@
   </dialog>
 
   <!-- Firebase + Scripts -->
+  <!-- Firebase Compat SDK – global firebase object (namespaced style) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+
+<script>
+  // Initialize Firebase globally once loaded
+  const firebaseConfig = {
+    apiKey: "AIzaSyCOyREKMNxq2hyoR44VOVzQKTwXJo944TU",
+    authDomain: "games-chillverse.firebaseapp.com",
+    projectId: "games-chillverse",
+    storageBucket: "games-chillverse.firebasestorage.app",
+    messagingSenderId: "505706463284",
+    appId: "1:505706463284:web:0242bfc389ba8278780a61"
+  };
+
+  // Make sure scripts loaded in order
+  window.firebase.initializeApp(firebaseConfig);
+</script>
   <script type="module" src="js/main.js"></script>
 </body>
   </html>
