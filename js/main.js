@@ -1,5 +1,4 @@
 // js/main.js – Entry point, auth, game loop, particles
-import { auth, db, playerRef, isOnline } from './firebase.js';
 import { loadGame, saveGame, tick, updateAchievements } from './game.js';
 import { updateUI, initEventListeners, formatNumber } from './ui.js';
 
@@ -44,33 +43,34 @@ function initParticles() {
   });
 }
 
-// Auth & player flow
+// Auth state listener (global firebase)
 firebase.auth().onAuthStateChanged(async (user) => {
   if (user) {
-    console.log('User signed in:', user.uid);
+    console.log('User signed in anonymously:', user.uid);
     document.getElementById('login').classList.remove('active');
     document.getElementById('loading').classList.add('active');
 
-    // Dynamic ref (no exported ref function needed)
-    playerRef = firebase.database().ref(`players/${game.phone || 'new'}`);
+    // Player data ref
+    const playerRef = firebase.database().ref(`players/${game.phone || 'new'}`);
 
     playerRef.on('value', (snap) => {
       const data = snap.val();
       if (data) {
         loadGame(data);
       } else {
-        saveGame(); // creates initial data
+        saveGame(); // create initial entry
       }
+      // Loading → main transition
       document.getElementById('logged-as').hidden = false;
       document.getElementById('logged-as').querySelector('strong').textContent = game.name;
       setTimeout(() => {
         document.getElementById('loading').classList.remove('active');
         document.getElementById('main').classList.add('active');
         updateUI();
-      }, 3000);
+      }, 3000); // remaining fake delay
     });
-    
-    // Leaderboard (namespaced query style – simpler)
+
+    // Leaderboard realtime listener
     const lbRef = firebase.database().ref('leaderboard');
     lbRef.orderByChild('chillverse').limitToLast(3).on('value', (snap) => {
       const tbody = document.querySelector('#leaderboard tbody');
@@ -82,46 +82,49 @@ firebase.auth().onAuthStateChanged(async (user) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${i+1}</td>
-          <td>${entry.name}</td>
-          <td>${formatNumber(entry.chillverse)}</td>
-          <td>${new Date(entry.lastUpdate).toLocaleString()}</td>
+          <td>${entry.name || 'Anon'}</td>
+          <td>${formatNumber(entry.chillverse || 0)}</td>
+          <td>${entry.lastUpdate ? new Date(entry.lastUpdate).toLocaleString() : '—'}</td>
         `;
         tbody.appendChild(tr);
       });
     });
-  } else {
-    console.log('No user signed in');
   }
 });
 
-// Login form handler (namespaced signInAnonymously)
-document.getElementById('login-form').addEventListener('submit', async e => {
+// Login submit handler
+document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = document.getElementById('player-name').value.trim();
   const phone = document.getElementById('player-phone').value.trim();
 
-  if (!name || !phone.match(/^\+?\d{10,15}$/)) {
-    alert('Please enter a valid name and phone number.');
+  if (!name || !/^\+?\d{10,15}$/.test(phone)) {
+    alert('Please enter a valid name and WhatsApp number (e.g. +2348012345678)');
     return;
   }
 
   game.name = name;
-  game.phone = phone.replace(/\D/g, '');
+  game.phone = phone.replace(/\D/g, ''); // store clean digits
 
   try {
     console.log('Attempting anonymous sign-in...');
     await firebase.auth().signInAnonymously();
-    console.log('Anonymous sign-in successful');
+    console.log('Sign-in success');
   } catch (err) {
-    console.error('Sign-in failed:', err.code, err.message);
-    alert('Login error: ' + (err.message || 'Unknown error'));
+    console.error('Anonymous auth failed:', err.code, err.message);
+    alert('Login failed: ' + (err.message || 'Check console for details'));
   }
 });
 
-// Logout (update if you have logout logic)
+// Logout
 document.getElementById('logout-btn').onclick = () => {
-  if (confirm('Logout? Progress is saved.')) {
-    firebase.auth().signOut().then(() => location.reload());
+  if (confirm('Logout? Your progress is saved in Firebase.')) {
+    firebase.auth().signOut().then(() => {
+      location.reload();
+    }).catch(err => {
+      console.error('Sign-out failed:', err);
+      alert('Logout failed – try refreshing');
+    });
   }
 };
 
