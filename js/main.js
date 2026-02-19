@@ -1,7 +1,7 @@
 // js/main.js – Entry point, auth, game loop, particles
 import { auth, db, playerRef, signInAnonymously, onAuthStateChanged, ref, onValue, set, query, orderByChild, limitToLast } from './firebase.js';
 import { loadGame, saveGame, tick, updateAchievements } from './game.js';
-import { updateUI, initEventListeners } from './ui.js';
+import { updateUI, initEventListeners, formatNumber } from './ui.js';
 
 // Particles background (simple version – can replace with particles.js later)
 function initParticles() {
