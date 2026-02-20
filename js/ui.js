@@ -1,132 +1,156 @@
-// js/ui.js – UI rendering & event binding helpers 
-import {
-  clickHarvest, buyFlake, buyChillGen, buyRevel, buyVerse,
-  prestigeCold, prestigeInsp, prestigeScript, convertChill,
-  updateAchievements, saveGame, canBuyFlake, canBuyChillGen,
-  canBuyRevel, canBuyVerse, canPrestigeCold, canPrestigeInsp, canPrestigeScript
-} from './game.js';
+// js/ui.js – Rendering & events
 
-const ACHIEVEMENTS = [
-  { id: 1, name: 'Click 1k Drops', icon: '👆' },
-  { id: 2, name: 'First Flake', icon: '❄️' },
-  { id: 3, name: '1e12 Drops', icon: '💧' },
-  { id: 4, name: 'First Cold Prestige', icon: '🧊' },
-  { id: 5, name: '10 Flakes', icon: '❄️×10' },
-  { id: 6, name: '1e9 Chill', icon: '🌬️' },
-  { id: 7, name: 'First Chill Gen', icon: '⚙️' },
-  { id: 8, name: '1e18 Chill', icon: '🌬️×∞' },
-  { id: 9, name: 'First Insp Prestige', icon: '💡' },
-  { id: 10, name: '5 Revels', icon: '✨' },
-  { id: 11, name: '1e30 Insp', icon: '💡×∞' },
-  { id: 12, name: '1e50 ChillVerse', icon: '🌌' },
-  { id: 13, name: '5x All Prestiges', icon: '🔄' },
-  { id: 14, name: 'Big Offline Gain', icon: '⏳' },
-  { id: 15, name: 'Top 3 Leaderboard', icon: '🏆' }
-];
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.tab-panel');
 
-export function formatNumber(n) {
-  if (n == null || !isFinite(n)) return '∞';
-  if (n < 1000) return Math.floor(n).toLocaleString();
-  const exp = n.toExponential(2);
-  return exp.replace(/e\+?/, 'e');
+function switchTab(tabName) {
+  tabs.forEach(t => t.classList.remove('active'));
+  panels.forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+  document.getElementById(`${tabName}-tab`).classList.add('active');
 }
 
-export function updateUI() {
-  // Resources
-  document.getElementById('drops').textContent = formatNumber(game.drops);
-  document.getElementById('total-drops').textContent = formatNumber(game.totalDrops);
-  document.getElementById('chill').textContent = formatNumber(game.chill);
-  document.getElementById('total-chill').textContent = formatNumber(game.totalChill);
-  document.getElementById('insp').textContent = formatNumber(game.insp);
-  document.getElementById('total-insp').textContent = formatNumber(game.totalInsp);
-  document.getElementById('chillverse-game').textContent = formatNumber(game.chillverse);
-  document.getElementById('chillverse-profile').textContent = formatNumber(game.chillverse);
+function updateDisplay() {
+  document.getElementById('drops').textContent = game.formatNumber(game.drops);
+  document.getElementById('total-drops').textContent = game.formatNumber(game.totalDrops);
+  document.getElementById('chill').textContent = game.formatNumber(game.chill);
+  document.getElementById('total-chill').textContent = game.formatNumber(game.totalChill);
+  document.getElementById('insp').textContent = game.formatNumber(game.insp);
+  document.getElementById('total-insp').textContent = game.formatNumber(game.totalInsp);
+  document.getElementById('chillverse').textContent = game.formatNumber(game.chillverse);
+  document.getElementById('chillverse-profile').textContent = game.formatNumber(game.chillverse);
 
-  // Buyers enabled state & text
-  document.getElementById('buy-flake').disabled = !canBuyFlake();
-  document.getElementById('buy-flake').textContent = `Flake (${game.flakes}) - ${formatNumber(game.flakeCost)} Drops`;
+  document.getElementById('buy-flake').disabled = game.drops < game.flakeCost;
+  document.getElementById('buy-flake').textContent = `Flake (${game.flakes}) - ${game.formatNumber(game.flakeCost)}`;
 
-  document.getElementById('buy-chillgen').disabled = !canBuyChillGen();
-  document.getElementById('buy-chillgen').textContent = `Chill Gen (${game.chillGen}) - ${formatNumber(game.chillGenCost)} Chill`;
+  document.getElementById('buy-chillgen').disabled = game.chill < game.chillGenCost;
+  document.getElementById('buy-chillgen').textContent = `Chill Gen (${game.chillGen}) - ${game.formatNumber(game.chillGenCost)}`;
 
-  document.getElementById('buy-revel').disabled = !canBuyRevel();
-  document.getElementById('buy-revel').textContent = `Revel (${game.revel}) - ${formatNumber(game.revelCost)} Insp`;
+  document.getElementById('buy-revel').disabled = game.insp < game.revelCost;
+  document.getElementById('buy-revel').textContent = `Revel (${game.revel}) - ${game.formatNumber(game.revelCost)}`;
 
-  document.getElementById('buy-verse').disabled = !canBuyVerse();
-  document.getElementById('buy-verse').textContent = `Verse (${game.verse}) - ${formatNumber(game.verseCost)} ChillVerse`;
+  document.getElementById('buy-verse').disabled = game.chillverse < game.verseCost;
+  document.getElementById('buy-verse').textContent = `Verse (${game.verse}) - ${game.formatNumber(game.verseCost)}`;
 
-  // Prestige buttons
-  document.getElementById('prestige-cold').disabled = !canPrestigeCold();
-  document.getElementById('prestige-insp').disabled = !canPrestigeInsp();
-  document.getElementById('prestige-script').disabled = !canPrestigeScript();
+  document.getElementById('prestige-cold').disabled = game.totalDrops < 1e21;
+  document.getElementById('prestige-insp').disabled = game.totalChill < 1e30;
+  document.getElementById('prestige-script').disabled = game.totalInsp < 1e40;
 
-  // Earn tab
-  document.getElementById('earn-chill').textContent = formatNumber(game.chill);
+  document.getElementById('earn-chill').textContent = game.formatNumber(game.chill);
   document.getElementById('convert-btn').disabled = game.chill < 1000;
 
-  // Profile
   document.getElementById('profile-name').textContent = game.name;
-  document.getElementById('profile-phone').textContent = game.phone.replace(/(\+\d{3})(\d{4})(\d{4})(\d+)/, '$1 $2 $3 $4'); // masked example
+  document.getElementById('profile-phone').textContent = game.phone ? `+${game.phone}` : '';
   document.getElementById('avatar').textContent = game.name.charAt(0).toUpperCase();
 
-  updateAchievementsGrid();
-}
-
-function updateAchievementsGrid() {
-  const grid = document.getElementById('achievements-grid');
+  // Achievements grid
+  const grid = document.getElementById('ach-grid');
   grid.innerHTML = '';
   ACHIEVEMENTS.forEach(ach => {
     const unlocked = game.achievements.has(ach.id);
-    const el = document.createElement('div');
-    el.className = `ach ${unlocked ? 'unlocked' : ''}`;
-    el.innerHTML = `
-      <div class="badge">${ach.icon}</div>
-      <div>${ach.name}</div>
-    `;
-    grid.appendChild(el);
+    const div = document.createElement('div');
+    div.className = `ach ${unlocked ? 'unlocked' : ''}`;
+    div.innerHTML = `<div class="badge">\( {ach.icon}</div><div> \){ach.name}</div>`;
+    grid.appendChild(div);
   });
 }
 
-export function initEventListeners() {
-  // Click harvest
-  document.getElementById('click-btn').addEventListener('click', () => {
-    clickHarvest();
-    updateAchievements();
-    updateUI();
-  });
-
-  // Buy buttons
-  document.getElementById('buy-flake').onclick = () => { buyFlake(); updateAchievements(); updateUI(); };
-  document.getElementById('buy-chillgen').onclick = () => { buyChillGen(); updateAchievements(); updateUI(); };
-  document.getElementById('buy-revel').onclick = () => { buyRevel(); updateAchievements(); updateUI(); };
-  document.getElementById('buy-verse').onclick = () => { buyVerse(); updateAchievements(); updateUI(); };
-
-  // Prestige
-  document.getElementById('prestige-cold').onclick = () => { prestigeCold(); updateAchievements(); updateUI(); };
-  document.getElementById('prestige-insp').onclick = () => { prestigeInsp(); updateAchievements(); updateUI(); };
-  document.getElementById('prestige-script').onclick = () => { prestigeScript(); updateAchievements(); updateUI(); };
-
-  // Convert
-  document.getElementById('convert-btn').onclick = () => { convertChill(); updateUI(); };
-
-  // Modal close
-  document.getElementById('close-modal').onclick = () => document.getElementById('screenshot-modal').close();
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  game.loadProgress();
+  updateDisplay();
 
   // Tabs
-  document.querySelectorAll('.tab').forEach(tab => {
+  tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+      switchTab(tab.dataset.tab);
     });
   });
 
-  // Logout
-  document.getElementById('logout-btn').onclick = () => {
-    if (confirm('Logout? Progress is saved.')) {
-      // signOut(auth) handled in main.js
+  // Login
+  document.getElementById('login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('player-name').value.trim() || 'Player';
+    const phone = document.getElementById('player-phone').value.trim();
+
+    game.name = name;
+    game.phone = phone.replace(/\D/g, '');
+
+    document.getElementById('login').hidden = true;
+    document.getElementById('loading').hidden = false;
+    document.getElementById('logged-message').hidden = false;
+    document.getElementById('logged-message').querySelector('strong').textContent = name;
+
+    setTimeout(() => {
+      document.getElementById('loading').hidden = true;
+      document.getElementById('main').hidden = false;
+      updateDisplay();
+      game.saveProgress();
+    }, 3000);
+  });
+
+  // Game actions
+  document.getElementById('click-btn').onclick = () => { game.harvest(); game.checkAchievements(); updateDisplay(); game.saveProgress(); };
+  document.getElementById('buy-flake').onclick = () => { game.buyFlake(); updateDisplay(); game.saveProgress(); };
+  document.getElementById('buy-chillgen').onclick = () => { game.buyChillGen(); updateDisplay(); game.saveProgress(); };
+  document.getElementById('buy-revel').onclick = () => { game.buyRevel(); updateDisplay(); game.saveProgress(); };
+  document.getElementById('buy-verse').onclick = () => { game.buyVerse(); updateDisplay(); game.saveProgress(); };
+
+  document.getElementById('prestige-cold').onclick = () => { game.prestigeCold(); updateDisplay(); game.saveProgress(); };
+  document.getElementById('prestige-insp').onclick = () => { game.prestigeInsp(); updateDisplay(); game.saveProgress(); };
+  document.getElementById('prestige-script').onclick = () => { game.prestigeScript(); updateDisplay(); game.saveProgress(); };
+
+  document.getElementById('convert-btn').onclick = () => {
+    if (game.convertChill()) updateDisplay();
+  };
+
+  document.getElementById('close-modal').onclick = () => document.getElementById('convert-modal').close();
+
+  document.getElementById('reset-btn').onclick = () => {
+    if (confirm('Reset ALL progress?')) {
+      localStorage.removeItem('idleVerses');
       location.reload();
     }
-  };  
-}
+  };
+
+  // Game loop
+  setInterval(() => {
+    game.tick();
+    updateDisplay();
+    game.saveProgress();
+  }, 100);
+
+  // Particles background
+  const canvas = document.getElementById('particles');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const particles = Array.from({length: 60}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4,
+    r: Math.random() * 2 + 0.5
+  }));
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(6, 182, 212, 0.5)';
+      ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+});
