@@ -166,10 +166,10 @@
   <h1 class="title">Idle Verses</h1>
   <form id="login-form">
     <label for="player-name-input">Your Name</label>
-    <input id="player-name-input" type="text" placeholder="e.g. Presido" required>
+    <input id="player-name-input" type="text" placeholder="Enter Player Name...." required>
 
     <label for="player-phone">WhatsApp Number</label>
-    <input id="player-phone" type="tel" placeholder="+2348012345678" required>
+    <input id="player-phone" type="tel" placeholder="+234....." required>
 
     <button type="submit">Start Playing</button>
   </form>
@@ -191,12 +191,12 @@
   <div id="game">
     <h1>Idle Verses</h1>
     <div id="chills">Chills: 0</div>
-    <button id="click" class="game-btn" aria-label="Click to earn 1 Chill">Click! (+1)</button>
+    <button id="click" class="game-btn" aria-label="Click to earn 1 Chill">Gain 1 Chills</button>
     <div id="upgrades"></div>
 
     <!-- Manual clicks counter + auto-save text -->
     <div class="save-info">
-      <span>Manual clicks: <span id="manual-count">0</span></span>
+      <span>Chill clicks: <span id="manual-count">0</span></span>
       <span>Auto-saves progress!</span>
     </div>
   </div>
@@ -206,8 +206,7 @@
 </section>
 
 <!-- Background Music (your file) -->
-<audio id="bg-music" loop>
-  <source src="Sounds/my-music.mp3" type="audio/mpeg">
+<audio id="bg-music" loop>  <source src="Sounds/Sound 1.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 
@@ -230,7 +229,7 @@ function load() {
     const data = JSON.parse(saved);
     chills = data.chills || 0;
     auto = data.auto || 0;
-    manualClicks = data.manualClicks || 0;
+    manualClicks = data.chillClicks || 0;
   }
 }
 
@@ -243,7 +242,7 @@ function updateDisplay() {
 
   const btn = document.createElement('button');
   btn.className = 'game-btn upgrade';
-  btn.textContent = `Buy Auto-Clicker (${auto}) - ${Math.floor(autocost)} Chills`;
+  btn.textContent = `Get Automated Chills (${auto}) - ${Math.floor(autocost)} Chills`;
   btn.disabled = chills < autocost;
   btn.onclick = () => {
     if (chills >= autocost) {
@@ -321,7 +320,7 @@ toggleBtn.onclick = () => {
 
 // Earn button (bottom-right round)
 document.getElementById('sticky-earn').onclick = () => {
-  alert("Earn feature: 500M Chills = 250 Diamonds\nScreenshot & send to Vicbot!");
+  alert("Earn feature: 500k Chills = 250 Diamonds\nScreenshot & send to Vicbot!");
 };
 
 // Particles background
