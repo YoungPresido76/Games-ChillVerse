@@ -97,12 +97,6 @@ input:invalid { border-color: #ef4444; }
 .buyers { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .prestiges { margin-top: 24px; width: 100%; }
 
-/* Leaderboard Table */
-.leader-table { width: 100%; border-collapse: collapse; margin: 16px 0; background: var(--surface); border-radius: 8px; overflow: hidden; }
-.leader-table th, .leader-table td { padding: 12px; text-align: left; border-bottom: var(--border); }
-.leader-table th { background: rgba(6,182,212,0.1); color: var(--neon-cyan); font-weight: 700; }
-.leader-table tr:hover { background: rgba(255,255,255,0.05); }
-
 /* Achievements Grid */
 .ach-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
 .ach { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; text-align: center; border: var(--border); transition: var(--transition); }
