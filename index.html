@@ -8,104 +8,247 @@
   <style>
     :root {
       --bg: #0a0a1a;
-      --surface: rgba(20,25,50,0.85);
-      --neon: #06b6d4;
-      --purple: #8b5cf6;
+      --surface: rgba(15,20,45,0.95);
+      --neon-cyan: #06f0ff;
+      --neon-purple: #8b5cf6;
+      --text: #e2e8f0;
     }
-    * { box-sizing: border-box; margin:0; padding:0; }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Rajdhani', sans-serif;
       background: var(--bg);
-      color: #e2e8f0;
+      color: var(--text);
       min-height: 100vh;
       overflow: hidden;
       position: relative;
     }
-    canvas { position: fixed; top:0; left:0; z-index: -1; opacity: 0.6; }
-    .screen { position: absolute; inset: 0; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-    .screen.active { display: flex; }
-    .title { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 8vw, 3.5rem); background: linear-gradient(90deg, var(--neon), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 10px; }
-    form { width: 100%; max-width: 340px; background: var(--surface); padding: 32px; border-radius: 16px; border: 1px solid rgba(6,182,212,0.3); }
-    label { display: block; margin: 16px 0 6px; font-weight: 500; }
-    input { width: 100%; padding: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(6,182,212,0.4); border-radius: 8px; color: white; font-size: 1rem; }
-    button { width: 100%; padding: 16px; margin-top: 20px; background: linear-gradient(90deg, var(--neon), #00f0ff); color: #000; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    canvas { position: fixed; top:0; left:0; width:100%; height:100%; z-index: -1; opacity: 0.65; }
 
-    .loader { text-align: center; }
-    .spinner { width: 50px; height: 50px; border: 5px solid rgba(6,182,212,0.2); border-top-color: var(--neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    header {
+      background: rgba(10,10,26,0.98);
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(6,240,255,0.2);
+      position: relative;
+      z-index: 10;
+    }
+    .title { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .layout { display: grid; grid-template-columns: 220px 1fr 260px; gap: 20px; max-width: 1200px; width: 100%; height: calc(100vh - 80px); }
-    @media (max-width: 768px) { .layout { grid-template-columns: 1fr; height: auto; } }
+    .hamburger { font-size: 1.8rem; cursor: pointer; color: var(--neon-cyan); }
 
-    .click-btn { width: 220px; height: 220px; border-radius: 50%; font-size: 1.4rem; background: linear-gradient(135deg, var(--purple), var(--neon)); box-shadow: 0 0 40px rgba(6,182,212,0.7); animation: float 3s ease-in-out infinite; }
-    @keyframes float { 50% { transform: translateY(-15px); } }
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 60px;
+      width: 240px;
+      height: calc(100vh - 60px);
+      background: var(--surface);
+      border-right: 1px solid rgba(6,240,255,0.2);
+      padding: 20px 0;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar button {
+      width: 100%;
+      padding: 16px 24px;
+      background: none;
+      border: none;
+      color: var(--text);
+      text-align: left;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sidebar button:hover, .sidebar button.active {
+      background: rgba(6,240,255,0.15);
+      color: var(--neon-cyan);
+      padding-left: 32px;
+    }
 
-    .resource { background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; text-align: center; border: 1px solid rgba(6,182,212,0.2); }
-    .amount { font-size: 2.2rem; font-weight: 700; color: var(--neon); }
+    .main-content {
+      margin-left: 240px;
+      padding: 20px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+    }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; }
+      .main-content { margin-left: 0; }
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .click-btn {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      font-size: 1.6rem;
+      background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+      color: #000;
+      box-shadow: 0 0 50px rgba(6,240,255,0.6);
+      animation: float 3s ease-in-out infinite;
+      margin: 30px auto;
+      display: block;
+    }
+    @keyframes float { 50% { transform: translateY(-20px); } }
+
+    .resource {
+      background: var(--surface);
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(6,240,255,0.2);
+    }
+    .amount { font-size: 2.4rem; font-weight: 700; color: var(--neon-cyan); }
+
+    .profile {
+      position: fixed;
+      right: 20px;
+      top: 80px;
+      width: 260px;
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      border: 1px solid rgba(6,240,255,0.2);
+    }
+    .avatar {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+      margin: 0 auto 15px;
+      font-size: 2.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: 700;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: var(--surface);
+      padding: 32px;
+      border-radius: 16px;
+      max-width: 380px;
+      text-align: center;
+      border: 1px solid var(--neon-cyan);
+    }
   </style>
 </head>
 <body>
 
 <canvas id="particles"></canvas>
 
-<main>
-  <!-- LOGIN -->
-  <section id="login-screen" class="screen active">
-    <h1 class="title">Idle Verses</h1>
-    <p style="margin-bottom:30px; opacity:0.8;">Chill Verse Group Game</p>
-    <form id="login-form">
-      <label>Your Name</label>
-      <input type="text" id="player-name" placeholder="e.g. Presido" required>
+<header>
+  <div class="hamburger" onclick="toggleSidebar()">☰</div>
+  <div class="title">Idle Verses</div>
+  <div style="width:30px"></div>
+</header>
 
-      <label>WhatsApp Number</label>
-      <input type="tel" id="player-phone" placeholder="+2348012345678" required>
+<!-- LEFT SIDEBAR -->
+<nav id="sidebar" class="sidebar">
+  <button onclick="switchTab(0)" class="active">Verses</button>
+  <button onclick="switchTab(1)">Achievements</button>
+  <button onclick="switchTab(2)">Earn</button>
+</nav>
 
-      <button type="submit">Start Playing</button>
-    </form>
-  </section>
+<!-- RIGHT PROFILE -->
+<aside class="profile">
+  <div id="avatar" class="avatar">P</div>
+  <h3 id="profile-name">Player</h3>
+  <p id="profile-phone" style="opacity:0.7; font-size:0.95rem;"></p>
+  <div style="margin:25px 0; font-size:1.4rem;">ChillVerse: <span id="chillverse-total" style="color:var(--neon-cyan);">0</span></div>
+  <button onclick="resetGame()" style="background:#222; color:white; padding:12px 28px; border:none; border-radius:8px; width:100%; cursor:pointer;">Reset Progress</button>
+</aside>
 
-  <!-- LOADING -->
-  <section id="loading-screen" class="screen">
-    <div class="loader">
-      <div class="spinner"></div>
-      <p>Setting up player logs...</p>
-      <p id="logged-as" style="margin-top:20px; font-size:1.1rem;">Logged in as <strong></strong></p>
-    </div>
-  </section>
-
-  <!-- MAIN GAME -->
-  <section id="main-screen" class="screen">
-    <h1 class="title" style="margin-bottom:20px;">Idle Verses</h1>
-    <div class="layout">
-      <!-- Left Dashboard -->
-      <nav style="background:var(--surface); padding:20px; border-radius:12px; display:flex; flex-direction:column; gap:10px;">
-        <button class="tab active" data-tab="verses">Verses</button>
-        <button class="tab" data-tab="achievements">Achievements</button>
-        <button class="tab" data-tab="earn">Earn</button>
-      </nav>
-
-      <!-- Content -->
-      <div id="content-area" style="background:var(--surface); padding:24px; border-radius:12px; overflow:auto;">
-        <!-- Verses tab content will be injected here by JS -->
+<!-- MAIN CONTENT AREA -->
+<div class="main-content">
+  <!-- Verses Tab -->
+  <div id="tab-0" class="tab-panel active">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:16px; margin-bottom:30px;">
+      <div class="resource">
+        <h3>Drops</h3>
+        <div class="amount" id="drops">0</div>
+        <small>Total: <span id="total-drops">0</span></small>
       </div>
-
-      <!-- Right Profile -->
-      <div style="background:var(--surface); padding:24px; border-radius:12px; text-align:center;">
-        <div id="avatar" style="width:90px;height:90px;margin:0 auto 15px; background:linear-gradient(135deg,var(--purple),var(--neon)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700;"></div>
-        <h3 id="profile-name"></h3>
-        <p id="profile-phone" style="opacity:0.7;"></p>
-        <div style="margin:20px 0; font-size:1.3rem;">ChillVerse: <span id="cv-total" style="color:var(--neon); font-weight:700;">0</span></div>
-        <button onclick="resetGame()" style="background:#333; color:white; padding:12px 24px; border:none; border-radius:8px; cursor:pointer;">Reset Progress</button>
+      <div class="resource">
+        <h3>Chill</h3>
+        <div class="amount" id="chill">0</div>
+        <small>Total: <span id="total-chill">0</span></small>
+      </div>
+      <div class="resource">
+        <h3>Insp</h3>
+        <div class="amount" id="insp">0</div>
+        <small>Total: <span id="total-insp">0</span></small>
+      </div>
+      <div class="resource">
+        <h3>ChillVerse</h3>
+        <div class="amount" id="chillverse">0</div>
       </div>
     </div>
-  </section>
-</main>
+
+    <button id="harvest-btn" class="click-btn" onclick="harvest()">❄️ HARVEST</button>
+
+    <div style="display:flex; flex-direction:column; gap:12px; max-width:420px; margin:0 auto;">
+      <button id="buy-flake" onclick="buyFlake()">Flake (0) - 10</button>
+      <button id="buy-chillgen" onclick="buyChillGen()">Chill Gen (0) - 100</button>
+      <button id="buy-revel" onclick="buyRevel()">Revel (0) - 1e6</button>
+      <button id="buy-verse" onclick="buyVerse()">Verse (0) - 1e12</button>
+    </div>
+
+    <div style="margin-top:40px; text-align:center;">
+      <button onclick="prestigeCold()" id="prestige-cold" style="background:#1e2937; color:var(--neon-cyan); padding:14px 32px; border:2px solid var(--neon-cyan); border-radius:8px; margin:8px;">Cold Prestige</button>
+      <button onclick="prestigeInsp()" id="prestige-insp" style="background:#1e2937; color:var(--neon-cyan); padding:14px 32px; border:2px solid var(--neon-cyan); border-radius:8px; margin:8px;">Insp Prestige</button>
+      <button onclick="prestigeScript()" id="prestige-script" style="background:#1e2937; color:var(--neon-cyan); padding:14px 32px; border:2px solid var(--neon-cyan); border-radius:8px; margin:8px;">Script Prestige</button>
+    </div>
+  </div>
+
+  <!-- Achievements Tab -->
+  <div id="tab-1" class="tab-panel">
+    <h2 style="text-align:center; margin-bottom:20px;">Achievements (15)</h2>
+    <div id="achievements-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px;"></div>
+  </div>
+
+  <!-- Earn Tab -->
+  <div id="tab-2" class="tab-panel">
+    <h2 style="text-align:center;">Earn Diamonds</h2>
+    <p style="text-align:center; margin:20px 0;">1000 Chill = 100 Diamonds</p>
+    <div style="text-align:center; font-size:1.3rem; margin:20px 0;">
+      Available Chill: <span id="earn-chill" style="color:var(--neon-cyan);">0</span>
+    </div>
+    <button onclick="convertChill()" id="convert-btn" style="width:100%; max-width:340px; margin:0 auto; display:block; padding:16px; background:linear-gradient(90deg,var(--neon-cyan),#00f0ff); color:#000; border:none; border-radius:12px; font-size:1.2rem;">Convert 1000 Chill</button>
+  </div>
+</div>
+
+<!-- Conversion Modal -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <h3>✅ Conversion Successful!</h3>
+    <p id="modal-text" style="margin:20px 0; line-height:1.5;"></p>
+    <p style="margin-bottom:25px;">Screenshot this message and send it to Vicbot in the group to redeem your Diamonds.</p>
+    <button onclick="closeModal()" style="padding:12px 40px; background:var(--neon-cyan); color:#000; border:none; border-radius:8px; font-weight:700;">Close</button>
+  </div>
+</div>
 
 <script>
 // ====================== GAME STATE ======================
 let game = {
-  name: "", phone: "",
+  name: "Player",
+  phone: "",
   drops: 0, totalDrops: 0,
   flakes: 0, flakeCost: 10,
   chill: 0, totalChill: 0,
@@ -120,38 +263,35 @@ let game = {
 };
 
 const ACHIEVEMENTS = [
-    { id: 1, name: 'First 1,000 Drops', icon: '👆', check: () => window.game.totalDrops >= 1e3 },
-  { id: 2, name: 'First Flake', icon: '❄️', check: () => window.game.flakes >= 1 },
-  { id: 3, name: '1e12 Drops', icon: '💧', check: () => window.game.totalDrops >= 1e12 },
-  { id: 4, name: 'First Cold Prestige', icon: '🧊', check: () => window.game.coldMult > 1 },
-  { id: 5, name: '10 Flakes', icon: '❄️×10', check: () => window.game.flakes >= 10 },
-  { id: 6, name: '1e9 Chill', icon: '🌬️', check: () => window.game.totalChill >= 1e9 },
-  { id: 7, name: 'First Chill Gen', icon: '⚙️', check: () => window.game.chillGen >= 1 },
-  { id: 8, name: '1e18 Chill', icon: '🌬️×∞', check: () => window.game.totalChill >= 1e18 },
-  { id: 9, name: 'First Insp Prestige', icon: '💡', check: () => window.game.inspMult > 1 },
-  { id: 10, name: '5 Revels', icon: '✨', check: () => window.game.revel >= 5 },
-  { id: 11, name: '1e30 Insp', icon: '💡×∞', check: () => window.game.totalInsp >= 1e30 },
-  { id: 12, name: '1e50 ChillVerse', icon: '🌌', check: () => window.game.chillverse >= 1e50 },
-  { id: 13, name: 'Multiple Prestiges', icon: '🔄', check: () => window.game.coldMult * window.game.inspMult * window.game.scriptMult > 100 },
-  { id: 14, name: 'Offline Progress', icon: '⏳', check: () => window.game.drops > 1e9 },
-  { id: 15, name: 'Persistent Player', icon: '🏆', check: () => true }
+  {id:1, name:"First 1k Drops", icon:"👆"},
+  {id:2, name:"First Flake", icon:"❄️"},
+  {id:3, name:"1e12 Drops", icon:"💧"},
+  {id:4, name:"First Cold Prestige", icon:"🧊"},
+  {id:5, name:"10 Flakes", icon:"❄️×10"},
+  {id:6, name:"1e9 Chill", icon:"🌬️"},
+  {id:7, name:"First Chill Gen", icon:"⚙️"},
+  {id:8, name:"1e18 Chill", icon:"🌬️×∞"},
+  {id:9, name:"First Insp Prestige", icon:"💡"},
+  {id:10, name:"5 Revels", icon:"✨"},
+  {id:11, name:"1e30 Insp", icon:"💡×∞"},
+  {id:12, name:"1e50 ChillVerse", icon:"🌌"},
+  {id:13, name:"Multiple Prestiges", icon:"🔄"},
+  {id:14, name:"Big Offline Gain", icon:"⏳"},
+  {id:15, name:"Chill Verse Master", icon:"🏆"}
 ];
 
-// ====================== FORMAT NUMBER ======================
-function formatNumber(n) {
-  if (!isFinite(n)) return '∞';
+// ====================== FORMAT ======================
+function format(n) {
   if (n < 1e4) return Math.floor(n).toLocaleString();
-  return n.toExponential(2).replace('e+', 'e');
+  return n.toExponential(2).replace('+','');
 }
 
 // ====================== SAVE / LOAD ======================
-function saveGame() {
-  localStorage.setItem('idleVerses', JSON.stringify({
-    ...game,
-    achievements: Array.from(game.achievements)
-  }));
+function save() {
+  const saveData = {...game, achievements: Array.from(game.achievements)};
+  localStorage.setItem('idleVerses', JSON.stringify(saveData));
 }
-function loadGame() {
+function load() {
   const saved = localStorage.getItem('idleVerses');
   if (saved) {
     const data = JSON.parse(saved);
@@ -160,7 +300,7 @@ function loadGame() {
   }
 }
 
-// ====================== CORE GAME LOGIC ======================
+// ====================== GAME LOGIC ======================
 function tick() {
   const mult = game.coldMult * game.inspMult * game.scriptMult;
   const dt = 0.1;
@@ -174,67 +314,129 @@ function tick() {
   game.chillverse += game.verse * mult * dt;
 
   game.lastUpdate = Date.now();
-  renderGame();
+  render();
 }
 
 function harvest() {
   const mult = game.coldMult * game.inspMult * game.scriptMult;
   game.drops += mult;
   game.totalDrops += mult;
-  renderGame();
+  render();
 }
+
+function buyFlake() { if (game.drops >= game.flakeCost) { game.drops -= game.flakeCost; game.flakes++; game.flakeCost = Math.floor(game.flakeCost*1.6); render(); } }
+function buyChillGen() { if (game.chill >= game.chillGenCost) { game.chill -= game.chillGenCost; game.chillGen++; game.chillGenCost = Math.floor(game.chillGenCost*1.8); render(); } }
+function buyRevel() { if (game.insp >= game.revelCost) { game.insp -= game.revelCost; game.revel++; game.revelCost *= 2.1; render(); } }
+function buyVerse() { if (game.chillverse >= game.verseCost) { game.chillverse -= game.verseCost; game.verse++; game.verseCost *= 2.5; render(); } }
+
+function prestigeCold() { if (game.totalDrops >= 1e21) { game.coldMult *= 1.8; resetLower(); render(); } }
+function prestigeInsp() { if (game.totalChill >= 1e30) { game.inspMult *= 1.7; resetLower(); render(); } }
+function prestigeScript() { if (game.totalInsp >= 1e40) { game.scriptMult *= 1.6; resetLower(); render(); } }
+
+function resetLower() {
+  game.drops = game.totalDrops = game.flakes = 0; game.flakeCost = 10;
+  game.chill = game.totalChill = game.chillGen = 0; game.chillGenCost = 100;
+  game.insp = game.totalInsp = game.revel = 0; game.revelCost = 1e6;
+}
+
+function convertChill() {
+  if (game.chill < 1000) return;
+  game.chill -= 1000;
+  document.getElementById('modal-text').innerHTML = `${game.name}, you have converted <strong>1,000 Chill</strong> to <strong>100 Diamonds</strong>.<br><br>Screenshot this and send to Vicbot!`;
+  document.getElementById('modal').style.display = 'flex';
+  render();
+}
+
+function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
 // ====================== RENDER ======================
-function renderGame() {
-  // This is a minimal render - you can expand it
-  document.getElementById('cv-total').textContent = formatNumber(game.chillverse);
+function render() {
+  document.getElementById('drops').textContent = format(game.drops);
+  document.getElementById('total-drops').textContent = format(game.totalDrops);
+  document.getElementById('chill').textContent = format(game.chill);
+  document.getElementById('total-chill').textContent = format(game.totalChill);
+  document.getElementById('insp').textContent = format(game.insp);
+  document.getElementById('total-insp').textContent = format(game.totalInsp);
+  document.getElementById('chillverse').textContent = format(game.chillverse);
+  document.getElementById('chillverse-total').textContent = format(game.chillverse);
+
+  document.getElementById('buy-flake').textContent = `Flake (${game.flakes}) - ${format(game.flakeCost)}`;
+  document.getElementById('buy-chillgen').textContent = `Chill Gen (${game.chillGen}) - ${format(game.chillGenCost)}`;
+  document.getElementById('buy-revel').textContent = `Revel (${game.revel}) - ${format(game.revelCost)}`;
+  document.getElementById('buy-verse').textContent = `Verse (${game.verse}) - ${format(game.verseCost)}`;
+
+  document.getElementById('earn-chill').textContent = format(game.chill);
+
+  // Profile
+  document.getElementById('avatar').textContent = game.name.charAt(0).toUpperCase();
+  document.getElementById('profile-name').textContent = game.name;
+  document.getElementById('profile-phone').textContent = game.phone;
+
+  // Achievements
+  const grid = document.getElementById('achievements-grid');
+  grid.innerHTML = '';
+  ACHIEVEMENTS.forEach((a,i) => {
+    const unlocked = game.achievements.has(i+1);
+    const div = document.createElement('div');
+    div.style.cssText = `background:var(--surface); padding:16px; border-radius:12px; text-align:center; border:1px solid \( {unlocked?'#06f0ff':'#333'}; opacity: \){unlocked?1:0.4};`;
+    div.innerHTML = `<div style="font-size:2rem;margin-bottom:8px;">\( {a.icon}</div><div> \){a.name}</div>`;
+    grid.appendChild(div);
+  });
 }
 
-// ====================== LOGIN FLOW ======================
-document.getElementById('login-form').addEventListener('submit', function(e) {
+// ====================== LOGIN ======================
+document.getElementById('login-form').addEventListener('submit', e => {
   e.preventDefault();
-
-  game.name = document.getElementById('player-name').value.trim() || "Player";
+  game.name = document.getElementById('player-name').value.trim() || "ChillPlayer";
   game.phone = document.getElementById('player-phone').value.trim();
 
-  // Hide login, show loading
-  document.getElementById('login-screen').classList.remove('active');
-  document.getElementById('loading-screen').classList.add('active');
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('loading-screen').style.display = 'flex';
   document.getElementById('logged-as').querySelector('strong').textContent = game.name;
 
   setTimeout(() => {
-    document.getElementById('loading-screen').classList.remove('active');
-    document.getElementById('main-screen').classList.add('active');
-    loadGame();
-    renderGame();
-    // Start game loop
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('main-screen').style.display = 'block';
+    load();
+    render();
     setInterval(tick, 100);
-  }, 2800);
+  }, 5000);
 });
 
-// Reset function
+// ====================== SIDEBAR ======================
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+function switchTab(n) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+n).classList.add('active');
+  document.querySelectorAll('#sidebar button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#sidebar button')[n].classList.add('active');
+}
+
+// ====================== RESET ======================
 function resetGame() {
-  if (confirm("Reset all progress?")) {
+  if (confirm("Reset ALL progress?")) {
     localStorage.removeItem('idleVerses');
     location.reload();
   }
 }
 
-// Particles
+// ====================== PARTICLES ======================
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const particles = Array.from({length: 70}, () => ({
+const particles = Array.from({length:80}, () => ({
   x: Math.random()*canvas.width,
   y: Math.random()*canvas.height,
-  vx: (Math.random()-0.5)*0.6,
-  vy: (Math.random()-0.5)*0.6,
-  r: Math.random()*2.5 + 0.8
+  vx: (Math.random()-0.5)*0.5,
+  vy: (Math.random()-0.5)*0.5,
+  r: Math.random()*2.5 + 1
 }));
 
-function animateParticles() {
+function animate() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
   particles.forEach(p => {
     p.x += p.vx; p.y += p.vy;
@@ -242,12 +444,12 @@ function animateParticles() {
     if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-    ctx.fillStyle = 'rgba(6,182,212,0.45)';
+    ctx.fillStyle = 'rgba(6,240,255,0.45)';
     ctx.fill();
   });
-  requestAnimationFrame(animateParticles);
+  requestAnimationFrame(animate);
 }
-animateParticles();
+animate();
 
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
@@ -255,4 +457,4 @@ window.addEventListener('resize', () => {
 });
 </script>
 </body>
-      </html>
+  </html>
