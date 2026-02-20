@@ -226,7 +226,7 @@ function updateDisplay() {
 
   const btn = document.createElement('button');
   btn.className = 'game-btn upgrade';
-  btn.textContent = `Buy Auto-Clicker (${auto}) - ${Math.floor(autocost)} Chills`;
+  btn.textContent = `Get Auto Chills (${auto}) - ${Math.floor(autocost)} Chills`;
   btn.disabled = chills < autocost;
   btn.onclick = () => {
     if (chills >= autocost) {
@@ -310,7 +310,7 @@ document.getElementById('sticky-earn').onclick = () => {
 
 // Particles background
 const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('3d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
