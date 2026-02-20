@@ -241,31 +241,58 @@ function updateDisplay() {
 }
 
 // ──────────────────────────────────────────────
-// Login → Loading → Game Flow
+// Check if user is already logged in (permanent login)
+// ──────────────────────────────────────────────
+const savedUser = localStorage.getItem('chillVerseUser');
+if (savedUser) {
+  // Auto-login: skip login form, go straight to loading
+  const user = JSON.parse(savedUser);
+  document.getElementById('player-name-display').textContent = user.name;
+  document.getElementById('player-name-display').hidden = false;
+
+  document.getElementById('login').hidden = true;
+  document.getElementById('loading').hidden = false;
+  document.getElementById('logged-message').style.display = 'block';
+  document.getElementById('logged-name').textContent = user.name;
+
+  setTimeout(() => {
+    document.getElementById('loading').hidden = true;
+    document.getElementById('game-screen').hidden = false;
+    startGame();
+  }, 5000);
+} else {
+  // First visit: show login
+  document.getElementById('login').hidden = false;
+}
+
+// ──────────────────────────────────────────────
+// Login form (only runs once)
 // ──────────────────────────────────────────────
 document.getElementById('login-form').addEventListener('submit', e => {
   e.preventDefault();
 
   const name = document.getElementById('player-name-input').value.trim() || 'Player';
-  document.getElementById('player-name-display').textContent = name;
-  document.getElementById('player-name-display').hidden = false;
+  const phone = document.getElementById('player-phone').value.trim();
 
-  document.getElementById('login').classList.remove('active');
-  document.getElementById('loading').classList.add('active');
+  // Save user permanently
+  localStorage.setItem('chillVerseUser', JSON.stringify({ name, phone }));
+
+  // Show loading
+  document.getElementById('login').hidden = true;
+  document.getElementById('loading').hidden = false;
+  document.getElementById('logged-message').style.display = 'block';
+  document.getElementById('logged-name').textContent = name;
 
   setTimeout(() => {
-    document.getElementById('logged-message').style.display = 'block';
-    document.getElementById('logged-name').textContent = name;
-  }, 2000);
+    document.getElementById('loading').hidden = true;
+    document.getElementById('game-screen').hidden = false;
 
-  setTimeout(() => {
-    document.getElementById('loading').classList.remove('active');
-    document.getElementById('game-screen').classList.add('active');
+    // Show name at top-right
+    document.getElementById('player-name-display').textContent = name;
+    document.getElementById('player-name-display').hidden = false;
 
-    load();
-    updateDisplay();
-
-    // Start auto-production
+ // Start auto-production
+    startGame();
     setInterval(() => {
       chills += auto / 10;
       updateDisplay();
@@ -277,7 +304,7 @@ document.getElementById('login-form').addEventListener('submit', e => {
     music.play().catch(() => console.log("Autoplay blocked – user interaction needed"));
   }, 5000);
 });
-
+  
 // Manual click
 document.getElementById('click').onclick = () => {
   chills++;
