@@ -2,136 +2,257 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Idle Verses - Chill Verse</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/main.css">
+  <style>
+    :root {
+      --bg: #0a0a1a;
+      --surface: rgba(20,25,50,0.85);
+      --neon: #06b6d4;
+      --purple: #8b5cf6;
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--bg);
+      color: #e2e8f0;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    canvas { position: fixed; top:0; left:0; z-index: -1; opacity: 0.6; }
+    .screen { position: absolute; inset: 0; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+    .screen.active { display: flex; }
+    .title { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 8vw, 3.5rem); background: linear-gradient(90deg, var(--neon), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 10px; }
+    form { width: 100%; max-width: 340px; background: var(--surface); padding: 32px; border-radius: 16px; border: 1px solid rgba(6,182,212,0.3); }
+    label { display: block; margin: 16px 0 6px; font-weight: 500; }
+    input { width: 100%; padding: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(6,182,212,0.4); border-radius: 8px; color: white; font-size: 1rem; }
+    button { width: 100%; padding: 16px; margin-top: 20px; background: linear-gradient(90deg, var(--neon), #00f0ff); color: #000; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .loader { text-align: center; }
+    .spinner { width: 50px; height: 50px; border: 5px solid rgba(6,182,212,0.2); border-top-color: var(--neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .layout { display: grid; grid-template-columns: 220px 1fr 260px; gap: 20px; max-width: 1200px; width: 100%; height: calc(100vh - 80px); }
+    @media (max-width: 768px) { .layout { grid-template-columns: 1fr; height: auto; } }
+
+    .click-btn { width: 220px; height: 220px; border-radius: 50%; font-size: 1.4rem; background: linear-gradient(135deg, var(--purple), var(--neon)); box-shadow: 0 0 40px rgba(6,182,212,0.7); animation: float 3s ease-in-out infinite; }
+    @keyframes float { 50% { transform: translateY(-15px); } }
+
+    .resource { background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; text-align: center; border: 1px solid rgba(6,182,212,0.2); }
+    .amount { font-size: 2.2rem; font-weight: 700; color: var(--neon); }
+  </style>
 </head>
 <body>
-  <canvas id="particles" aria-hidden="true"></canvas>
 
-  <main id="app">
-    <!-- Login -->
-    <section id="login" class="screen active">
-      <header>
-        <h1 class="title">Idle Verses</h1>
-        <p>Chill Verse Group Game</p>
-      </header>
-      <form id="login-form">
-        <label for="player-name">Your Name</label>
-        <input type="text" id="player-name" placeholder="e.g. Presido" required minlength="2">
+<canvas id="particles"></canvas>
 
-        <label for="player-phone">WhatsApp Number</label>
-        <input type="tel" id="player-phone" placeholder="+2348012345678" required pattern="\+?[0-9]{10,15}">
+<main>
+  <!-- LOGIN -->
+  <section id="login-screen" class="screen active">
+    <h1 class="title">Idle Verses</h1>
+    <p style="margin-bottom:30px; opacity:0.8;">Chill Verse Group Game</p>
+    <form id="login-form">
+      <label>Your Name</label>
+      <input type="text" id="player-name" placeholder="e.g. Presido" required>
 
-        <button type="submit" class="btn-primary">Start Playing</button>
-      </form>
-    </section>
+      <label>WhatsApp Number</label>
+      <input type="tel" id="player-phone" placeholder="+2348012345678" required>
 
-    <!-- Loading -->
-    <section id="loading" class="screen" hidden aria-live="polite">
-      <div class="loader">
-        <div class="spinner"></div>
-        <p>Setting up your progress...</p>
-        <p id="logged-message" hidden>Logged in as <strong></strong></p>
-      </div>
-    </section>
+      <button type="submit">Start Playing</button>
+    </form>
+  </section>
 
-    <!-- Main Game -->
-    <section id="main" class="screen" hidden>
-      <header class="game-header">
-        <h1 class="title">Idle Verses</h1>
-      </header>
-      <div class="layout">
-        <!-- Left: Dashboard -->
-        <nav class="dashboard" aria-label="Game sections">
-          <button class="tab active" data-tab="verses">Verses</button>
-          <button class="tab" data-tab="achievements">Achievements</button>
-          <button class="tab" data-tab="earn">Earn</button>
-        </nav>
-
-        <!-- Center: Content -->
-        <div class="content">
-          <!-- Verses -->
-          <article id="verses-tab" class="tab-panel active">
-            <div class="resources">
-              <div class="resource">
-                <h3>Drops</h3>
-                <div class="amount"><span id="drops">0</span></div>
-                <div>Total: <span id="total-drops">0</span></div>
-              </div>
-              <div class="resource">
-                <h3>Chill</h3>
-                <div class="amount"><span id="chill">0</span></div>
-                <div>Total: <span id="total-chill">0</span></div>
-              </div>
-              <div class="resource">
-                <h3>Insp</h3>
-                <div class="amount"><span id="insp">0</span></div>
-                <div>Total: <span id="total-insp">0</span></div>
-              </div>
-              <div class="resource">
-                <h3>ChillVerse</h3>
-                <div class="amount"><span id="chillverse">0</span></div>
-              </div>
-            </div>
-
-            <div class="buyers">
-              <button id="click-btn" class="click-btn" aria-label="Harvest Drops">❄️ Harvest</button>
-
-              <button id="buy-flake" class="btn-buy" disabled>Flake (0) - 10</button>
-              <button id="buy-chillgen" class="btn-buy" disabled>Chill Gen (0) - 100</button>
-              <button id="buy-revel" class="btn-buy" disabled>Revel (0) - 1e6</button>
-              <button id="buy-verse" class="btn-buy" disabled>Verse (0) - 1e12</button>
-
-              <div class="prestiges">
-                <button id="prestige-cold" class="btn-prestige" disabled>Cold Prestige (1e21 Drops)</button>
-                <button id="prestige-insp" class="btn-prestige" disabled>Insp Prestige (1e30 Chill)</button>
-                <button id="prestige-script" class="btn-prestige" disabled>Script Prestige (1e40 Insp)</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- Achievements -->
-          <article id="achievements-tab" class="tab-panel" hidden>
-            <h2>Achievements</h2>
-            <div id="ach-grid" class="ach-grid"></div>
-          </article>
-
-          <!-- Earn -->
-          <article id="earn-tab" class="tab-panel" hidden>
-            <h2>Earn Diamonds</h2>
-            <p>1000 Chill = 100 Diamonds</p>
-            <div>Available: <span id="earn-chill">0</span></div>
-            <button id="convert-btn" class="btn-primary" disabled>Convert 1000 Chill</button>
-          </article>
-        </div>
-
-        <!-- Right: Profile -->
-        <aside class="profile">
-          <div class="avatar" id="avatar"></div>
-          <h3 id="profile-name"></h3>
-          <p id="profile-phone"></p>
-          <div>ChillVerse: <span id="chillverse-profile">0</span></div>
-          <button id="reset-btn" class="btn-secondary">Reset Progress</button>
-        </aside>
-      </div>
-    </section>
-  </main>
-
-  <!-- Modal -->
-  <dialog id="convert-modal" class="modal">
-    <div>
-      <h3>Conversion Done!</h3>
-      <p id="convert-text"></p>
-      <p>Take screenshot & send to Vicbot in the group to redeem.</p>
-      <button id="close-modal" class="btn-primary">Close</button>
+  <!-- LOADING -->
+  <section id="loading-screen" class="screen">
+    <div class="loader">
+      <div class="spinner"></div>
+      <p>Setting up player logs...</p>
+      <p id="logged-as" style="margin-top:20px; font-size:1.1rem;">Logged in as <strong></strong></p>
     </div>
-  </dialog>
+  </section>
 
-  <script type="module" src="js/game.js"></script>
-  <script type="module" src="js/ui.js"></script>
+  <!-- MAIN GAME -->
+  <section id="main-screen" class="screen">
+    <h1 class="title" style="margin-bottom:20px;">Idle Verses</h1>
+    <div class="layout">
+      <!-- Left Dashboard -->
+      <nav style="background:var(--surface); padding:20px; border-radius:12px; display:flex; flex-direction:column; gap:10px;">
+        <button class="tab active" data-tab="verses">Verses</button>
+        <button class="tab" data-tab="achievements">Achievements</button>
+        <button class="tab" data-tab="earn">Earn</button>
+      </nav>
+
+      <!-- Content -->
+      <div id="content-area" style="background:var(--surface); padding:24px; border-radius:12px; overflow:auto;">
+        <!-- Verses tab content will be injected here by JS -->
+      </div>
+
+      <!-- Right Profile -->
+      <div style="background:var(--surface); padding:24px; border-radius:12px; text-align:center;">
+        <div id="avatar" style="width:90px;height:90px;margin:0 auto 15px; background:linear-gradient(135deg,var(--purple),var(--neon)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:700;"></div>
+        <h3 id="profile-name"></h3>
+        <p id="profile-phone" style="opacity:0.7;"></p>
+        <div style="margin:20px 0; font-size:1.3rem;">ChillVerse: <span id="cv-total" style="color:var(--neon); font-weight:700;">0</span></div>
+        <button onclick="resetGame()" style="background:#333; color:white; padding:12px 24px; border:none; border-radius:8px; cursor:pointer;">Reset Progress</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+// ====================== GAME STATE ======================
+let game = {
+  name: "", phone: "",
+  drops: 0, totalDrops: 0,
+  flakes: 0, flakeCost: 10,
+  chill: 0, totalChill: 0,
+  chillGen: 0, chillGenCost: 100,
+  insp: 0, totalInsp: 0,
+  revel: 0, revelCost: 1e6,
+  verse: 0, verseCost: 1e12,
+  chillverse: 0,
+  coldMult: 1, inspMult: 1, scriptMult: 1,
+  achievements: new Set(),
+  lastUpdate: Date.now()
+};
+
+const ACHIEVEMENTS = [
+    { id: 1, name: 'First 1,000 Drops', icon: '👆', check: () => window.game.totalDrops >= 1e3 },
+  { id: 2, name: 'First Flake', icon: '❄️', check: () => window.game.flakes >= 1 },
+  { id: 3, name: '1e12 Drops', icon: '💧', check: () => window.game.totalDrops >= 1e12 },
+  { id: 4, name: 'First Cold Prestige', icon: '🧊', check: () => window.game.coldMult > 1 },
+  { id: 5, name: '10 Flakes', icon: '❄️×10', check: () => window.game.flakes >= 10 },
+  { id: 6, name: '1e9 Chill', icon: '🌬️', check: () => window.game.totalChill >= 1e9 },
+  { id: 7, name: 'First Chill Gen', icon: '⚙️', check: () => window.game.chillGen >= 1 },
+  { id: 8, name: '1e18 Chill', icon: '🌬️×∞', check: () => window.game.totalChill >= 1e18 },
+  { id: 9, name: 'First Insp Prestige', icon: '💡', check: () => window.game.inspMult > 1 },
+  { id: 10, name: '5 Revels', icon: '✨', check: () => window.game.revel >= 5 },
+  { id: 11, name: '1e30 Insp', icon: '💡×∞', check: () => window.game.totalInsp >= 1e30 },
+  { id: 12, name: '1e50 ChillVerse', icon: '🌌', check: () => window.game.chillverse >= 1e50 },
+  { id: 13, name: 'Multiple Prestiges', icon: '🔄', check: () => window.game.coldMult * window.game.inspMult * window.game.scriptMult > 100 },
+  { id: 14, name: 'Offline Progress', icon: '⏳', check: () => window.game.drops > 1e9 },
+  { id: 15, name: 'Persistent Player', icon: '🏆', check: () => true }
+];
+
+// ====================== FORMAT NUMBER ======================
+function formatNumber(n) {
+  if (!isFinite(n)) return '∞';
+  if (n < 1e4) return Math.floor(n).toLocaleString();
+  return n.toExponential(2).replace('e+', 'e');
+}
+
+// ====================== SAVE / LOAD ======================
+function saveGame() {
+  localStorage.setItem('idleVerses', JSON.stringify({
+    ...game,
+    achievements: Array.from(game.achievements)
+  }));
+}
+function loadGame() {
+  const saved = localStorage.getItem('idleVerses');
+  if (saved) {
+    const data = JSON.parse(saved);
+    game.achievements = new Set(data.achievements || []);
+    Object.assign(game, data);
+  }
+}
+
+// ====================== CORE GAME LOGIC ======================
+function tick() {
+  const mult = game.coldMult * game.inspMult * game.scriptMult;
+  const dt = 0.1;
+
+  game.drops += game.flakes * mult * dt;
+  game.totalDrops += game.flakes * mult * dt;
+  game.chill += game.chillGen * mult * dt;
+  game.totalChill += game.chillGen * mult * dt;
+  game.insp += game.revel * mult * dt;
+  game.totalInsp += game.revel * mult * dt;
+  game.chillverse += game.verse * mult * dt;
+
+  game.lastUpdate = Date.now();
+  renderGame();
+}
+
+function harvest() {
+  const mult = game.coldMult * game.inspMult * game.scriptMult;
+  game.drops += mult;
+  game.totalDrops += mult;
+  renderGame();
+}
+
+// ====================== RENDER ======================
+function renderGame() {
+  // This is a minimal render - you can expand it
+  document.getElementById('cv-total').textContent = formatNumber(game.chillverse);
+}
+
+// ====================== LOGIN FLOW ======================
+document.getElementById('login-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  game.name = document.getElementById('player-name').value.trim() || "Player";
+  game.phone = document.getElementById('player-phone').value.trim();
+
+  // Hide login, show loading
+  document.getElementById('login-screen').classList.remove('active');
+  document.getElementById('loading-screen').classList.add('active');
+  document.getElementById('logged-as').querySelector('strong').textContent = game.name;
+
+  setTimeout(() => {
+    document.getElementById('loading-screen').classList.remove('active');
+    document.getElementById('main-screen').classList.add('active');
+    loadGame();
+    renderGame();
+    // Start game loop
+    setInterval(tick, 100);
+  }, 2800);
+});
+
+// Reset function
+function resetGame() {
+  if (confirm("Reset all progress?")) {
+    localStorage.removeItem('idleVerses');
+    location.reload();
+  }
+}
+
+// Particles
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const particles = Array.from({length: 70}, () => ({
+  x: Math.random()*canvas.width,
+  y: Math.random()*canvas.height,
+  vx: (Math.random()-0.5)*0.6,
+  vy: (Math.random()-0.5)*0.6,
+  r: Math.random()*2.5 + 0.8
+}));
+
+function animateParticles() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(6,182,212,0.45)';
+    ctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
 </body>
-            </html>
+      </html>
