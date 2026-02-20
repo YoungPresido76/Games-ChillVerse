@@ -137,6 +137,15 @@
       display: flex; align-items: center; justify-content: center;
     }
 
+    .save-info {
+      font-size: 0.75rem;
+      margin-top: 12px;
+      opacity: 0.8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * { animation-duration: 0.01ms !important; transition: none !important; }
     }
@@ -149,24 +158,24 @@
 <!-- Sound Toggle (top-left) -->
 <button id="sound-toggle" class="sound-toggle" aria-label="Toggle background music" title="Toggle music">🔊</button>
 
-<!-- Player name display (top-right) -->
+<!-- Player name (top-right) -->
 <div id="player-name-display" class="player-name" hidden></div>
 
-<!-- Login Screen -->
+<!-- Login -->
 <section id="login" class="screen active">
   <h1 class="title">Idle Verses</h1>
   <form id="login-form">
     <label for="player-name-input">Your Name</label>
-    <input id="player-name-input" type="text" placeholder="Enter Username....." required>
+    <input id="player-name-input" type="text" placeholder="e.g. Presido" required>
 
     <label for="player-phone">WhatsApp Number</label>
-    <input id="player-phone" type="tel" placeholder="+234......" required>
+    <input id="player-phone" type="tel" placeholder="+2348012345678" required>
 
     <button type="submit">Start Playing</button>
   </form>
 </section>
 
-<!-- Loading Screen -->
+<!-- Loading -->
 <section id="loading" class="screen" hidden aria-live="polite">
   <div class="loader">
     <div class="spinner"></div>
@@ -177,36 +186,42 @@
   </div>
 </section>
 
-<!-- Game Screen -->
+<!-- Game -->
 <section id="game-screen" class="screen" hidden>
   <div id="game">
     <h1>Idle Verses</h1>
     <div id="chills">Chills: 0</div>
-    <button id="click" class="game-btn" aria-label="Click to earn 1 Chill">Gain 1 Chills</button>
+    <button id="click" class="game-btn" aria-label="Click to earn 1 Chill">Click! (+1)</button>
     <div id="upgrades"></div>
-    <p style="font-size:0.8rem; margin-top:12px; opacity:0.8;">Auto-saves progress!</p>
+
+    <!-- Manual clicks counter + auto-save text -->
+    <div class="save-info">
+      <span>Manual clicks: <span id="manual-count">0</span></span>
+      <span>Auto-saves progress!</span>
+    </div>
   </div>
 
   <!-- Round floating Earn button (bottom-right) -->
   <button id="sticky-earn" class="sticky-earn" aria-label="Earn Diamonds">Earn</button>
 </section>
 
-<!-- Background Music (loops forever) -->
+<!-- Background Music (your file) -->
 <audio id="bg-music" loop>
-  <source src="Sounds/Sound 1.mp3" type="audio/mpeg">
+  <source src="Sounds/my-music.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 
 <script>
 // ──────────────────────────────────────────────
-// Game Logic (your original Group Clicker – adapted)
+// Game Logic
 // ──────────────────────────────────────────────
 let chills = 0;
 let auto = 0;
 let autocost = 15;
+let manualClicks = 0;  // NEW: track manual clicks
 
 function save() {
-  localStorage.setItem('idleVerses', JSON.stringify({ chills, auto }));
+  localStorage.setItem('idleVerses', JSON.stringify({ chills, auto, manualClicks }));
 }
 
 function load() {
@@ -215,18 +230,20 @@ function load() {
     const data = JSON.parse(saved);
     chills = data.chills || 0;
     auto = data.auto || 0;
+    manualClicks = data.manualClicks || 0;
   }
 }
 
 function updateDisplay() {
   document.getElementById('chills').textContent = 'Chills: ' + Math.floor(chills);
+  document.getElementById('manual-count').textContent = manualClicks;
 
   const upgrades = document.getElementById('upgrades');
   upgrades.innerHTML = '';
 
   const btn = document.createElement('button');
   btn.className = 'game-btn upgrade';
-  btn.textContent = `Get Auto Chills (${auto}) - ${Math.floor(autocost)} Chills`;
+  btn.textContent = `Buy Auto-Clicker (${auto}) - ${Math.floor(autocost)} Chills`;
   btn.disabled = chills < autocost;
   btn.onclick = () => {
     if (chills >= autocost) {
@@ -272,15 +289,16 @@ document.getElementById('login-form').addEventListener('submit', e => {
       save();
     }, 100);
 
-    // Start background music automatically (unless user toggles off later)
+    // Start background music automatically
     const music = document.getElementById('bg-music');
-    music.play().catch(() => console.log("Autoplay blocked – user interaction needed"));
+    music.play().catch(() => console.log("Autoplay blocked"));
   }, 5000);
 });
 
-// Manual click
+// Manual click – increment counter
 document.getElementById('click').onclick = () => {
   chills++;
+  manualClicks++;                // ← NEW: count manual clicks
   updateDisplay();
   save();
 };
@@ -294,18 +312,16 @@ toggleBtn.onclick = () => {
   if (isPlaying) {
     music.pause();
     toggleBtn.textContent = '🔇';
-    toggleBtn.title = 'Music off';
   } else {
     music.play();
     toggleBtn.textContent = '🔊';
-    toggleBtn.title = 'Music on';
   }
   isPlaying = !isPlaying;
 };
 
-// Earn button (round floating bottom-right)
+// Earn button (bottom-right round)
 document.getElementById('sticky-earn').onclick = () => {
-  alert("Earn feature coming soon!\n\n(100k Chills = 100 Diamonds – screenshot & send to Vicbot)");
+  alert("Earn feature: 500M Chills = 250 Diamonds\nScreenshot & send to Vicbot!");
 };
 
 // Particles background
