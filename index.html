@@ -20,7 +20,7 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Rajdhani', sans-serif;
-      font-size: 11px; /* very small base */
+      font-size: 11px;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -108,7 +108,21 @@
     }
     .player-name {
       position: absolute; top: 8px; right: 12px;
-      font-size: 0.9rem; opacity: 0.8;
+      font-size: 0.9rem; opacity: 0.8; color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
+    .sound-toggle {
+      position: absolute; top: 8px; left: 12px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      z-index: 100;
     }
 
     .sticky-earn {
@@ -132,9 +146,13 @@
 
 <canvas id="particles" aria-hidden="true"></canvas>
 
-<div id="player-name" class="player-name" hidden></div>
+<!-- Sound Toggle (top-left) -->
+<button id="sound-toggle" class="sound-toggle" aria-label="Toggle background music" title="Toggle music">🔊</button>
 
-<!-- Login -->
+<!-- Player name display (top-right) -->
+<div id="player-name-display" class="player-name" hidden></div>
+
+<!-- Login Screen -->
 <section id="login" class="screen active">
   <h1 class="title">Idle Verses</h1>
   <form id="login-form">
@@ -148,7 +166,7 @@
   </form>
 </section>
 
-<!-- Loading -->
+<!-- Loading Screen -->
 <section id="loading" class="screen" hidden aria-live="polite">
   <div class="loader">
     <div class="spinner"></div>
@@ -159,7 +177,7 @@
   </div>
 </section>
 
-<!-- Game -->
+<!-- Game Screen -->
 <section id="game-screen" class="screen" hidden>
   <div id="game">
     <h1>Idle Verses</h1>
@@ -172,6 +190,12 @@
   <!-- Round floating Earn button (bottom-right) -->
   <button id="sticky-earn" class="sticky-earn" aria-label="Earn Diamonds">Earn</button>
 </section>
+
+<!-- Background Music (loops forever) -->
+<audio id="bg-music" loop>
+  <source src="Sounds/Sound 1.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
 
 <script>
 // ──────────────────────────────────────────────
@@ -223,8 +247,8 @@ document.getElementById('login-form').addEventListener('submit', e => {
   e.preventDefault();
 
   const name = document.getElementById('player-name-input').value.trim() || 'Player';
-  document.getElementById('player-name').textContent = name;
-  document.getElementById('player-name').hidden = false;
+  document.getElementById('player-name-display').textContent = name;
+  document.getElementById('player-name-display').hidden = false;
 
   document.getElementById('login').classList.remove('active');
   document.getElementById('loading').classList.add('active');
@@ -241,11 +265,16 @@ document.getElementById('login-form').addEventListener('submit', e => {
     load();
     updateDisplay();
 
+    // Start auto-production
     setInterval(() => {
       chills += auto / 10;
       updateDisplay();
       save();
     }, 100);
+
+    // Start background music automatically (unless user toggles off later)
+    const music = document.getElementById('bg-music');
+    music.play().catch(() => console.log("Autoplay blocked – user interaction needed"));
   }, 5000);
 });
 
@@ -256,12 +285,30 @@ document.getElementById('click').onclick = () => {
   save();
 };
 
-// Earn button (round floating)
-document.getElementById('sticky-earn').onclick = () => {
-  alert("Earn feature coming soon!\n\n(500M Chills = 250 Diamonds – screenshot & send to Vicbot)");
+// Sound toggle (top-left)
+const toggleBtn = document.getElementById('sound-toggle');
+const music = document.getElementById('bg-music');
+let isPlaying = true;
+
+toggleBtn.onclick = () => {
+  if (isPlaying) {
+    music.pause();
+    toggleBtn.textContent = '🔇';
+    toggleBtn.title = 'Music off';
+  } else {
+    music.play();
+    toggleBtn.textContent = '🔊';
+    toggleBtn.title = 'Music on';
+  }
+  isPlaying = !isPlaying;
 };
 
-// Particles
+// Earn button (round floating bottom-right)
+document.getElementById('sticky-earn').onclick = () => {
+  alert("Earn feature coming soon!\n\n(100k Chills = 100 Diamonds – screenshot & send to Vicbot)");
+};
+
+// Particles background
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
