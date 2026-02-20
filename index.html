@@ -193,7 +193,7 @@
 
 <!-- Background Music (loops forever) -->
 <audio id="bg-music" loop>
-  <source src="Sounds/Sound 1.mp3" type="audio/mpeg">
+  <source src="Sounds/my-music.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 
@@ -241,58 +241,31 @@ function updateDisplay() {
 }
 
 // ──────────────────────────────────────────────
-// Check if user is already logged in (permanent login)
-// ──────────────────────────────────────────────
-const savedUser = localStorage.getItem('chillVerseUser');
-if (savedUser) {
-  // Auto-login: skip login form, go straight to loading
-  const user = JSON.parse(savedUser);
-  document.getElementById('player-name-display').textContent = user.name;
-  document.getElementById('player-name-display').hidden = false;
-
-  document.getElementById('login').hidden = true;
-  document.getElementById('loading').hidden = false;
-  document.getElementById('logged-message').style.display = 'block';
-  document.getElementById('logged-name').textContent = user.name;
-
-  setTimeout(() => {
-    document.getElementById('loading').hidden = true;
-    document.getElementById('game-screen').hidden = false;
-    startGame();
-  }, 5000);
-} else {
-  // First visit: show login
-  document.getElementById('login').hidden = false;
-}
-
-// ──────────────────────────────────────────────
-// Login form (only runs once)
+// Login → Loading → Game Flow
 // ──────────────────────────────────────────────
 document.getElementById('login-form').addEventListener('submit', e => {
   e.preventDefault();
 
   const name = document.getElementById('player-name-input').value.trim() || 'Player';
-  const phone = document.getElementById('player-phone').value.trim();
+  document.getElementById('player-name-display').textContent = name;
+  document.getElementById('player-name-display').hidden = false;
 
-  // Save user permanently
-  localStorage.setItem('chillVerseUser', JSON.stringify({ name, phone }));
-
-  // Show loading
-  document.getElementById('login').hidden = true;
-  document.getElementById('loading').hidden = false;
-  document.getElementById('logged-message').style.display = 'block';
-  document.getElementById('logged-name').textContent = name;
+  document.getElementById('login').classList.remove('active');
+  document.getElementById('loading').classList.add('active');
 
   setTimeout(() => {
-    document.getElementById('loading').hidden = true;
-    document.getElementById('game-screen').hidden = false;
+    document.getElementById('logged-message').style.display = 'block';
+    document.getElementById('logged-name').textContent = name;
+  }, 2000);
 
-    // Show name at top-right
-    document.getElementById('player-name-display').textContent = name;
-    document.getElementById('player-name-display').hidden = false;
+  setTimeout(() => {
+    document.getElementById('loading').classList.remove('active');
+    document.getElementById('game-screen').classList.add('active');
 
- // Start auto-production
-    startGame();
+    load();
+    updateDisplay();
+
+    // Start auto-production
     setInterval(() => {
       chills += auto / 10;
       updateDisplay();
@@ -304,7 +277,7 @@ document.getElementById('login-form').addEventListener('submit', e => {
     music.play().catch(() => console.log("Autoplay blocked – user interaction needed"));
   }, 5000);
 });
-  
+
 // Manual click
 document.getElementById('click').onclick = () => {
   chills++;
@@ -332,7 +305,7 @@ toggleBtn.onclick = () => {
 
 // Earn button (round floating bottom-right)
 document.getElementById('sticky-earn').onclick = () => {
-  alert("Earn feature coming soon!\n\n(100k Chills = 100 Diamonds – screenshot & send to Vicbot)");
+  alert("Earn feature coming soon!\n\n(500M Chills = 250 Diamonds – screenshot & send to Vicbot)");
 };
 
 // Particles background
