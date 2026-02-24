@@ -1,0 +1,2122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Idle Verse - Chill Verse Presents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'verse-dark': '#0a0a1f',
+                        'verse-darker': '#050510',
+                        'neon-cyan': '#00f3ff',
+                        'neon-magenta': '#ff00aa',
+                        'neon-purple': '#9d00ff',
+                        'neon-green': '#00ff88',
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(0, 243, 255, 0.5), 0 0 40px rgba(0, 243, 255, 0.3)' },
+                            '50%': { boxShadow: '0 0 40px rgba(0, 243, 255, 0.8), 0 0 80px rgba(0, 243, 255, 0.5)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #0a0a1f 0%, #050510 50%, #0a0a1f 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-strong {
+            background: rgba(10, 10, 31, 0.8);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+        }
+        
+        .neon-text-cyan {
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.5), 0 0 30px rgba(0, 243, 255, 0.3);
+        }
+        
+        .neon-text-magenta {
+            text-shadow: 0 0 10px rgba(255, 0, 170, 0.8), 0 0 20px rgba(255, 0, 170, 0.5), 0 0 30px rgba(255, 0, 170, 0.3);
+        }
+        
+        .neon-text-purple {
+            text-shadow: 0 0 10px rgba(157, 0, 255, 0.8), 0 0 20px rgba(157, 0, 255, 0.5), 0 0 30px rgba(157, 0, 255, 0.3);
+        }
+        
+        .neon-border-cyan {
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5), inset 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+        
+        .neon-border-magenta {
+            box-shadow: 0 0 10px rgba(255, 0, 170, 0.5), inset 0 0 10px rgba(255, 0, 170, 0.1);
+        }
+        
+        .orb-glow {
+            box-shadow: 
+                0 0 30px rgba(0, 243, 255, 0.6),
+                0 0 60px rgba(0, 243, 255, 0.4),
+                0 0 90px rgba(157, 0, 255, 0.3),
+                inset 0 0 30px rgba(0, 243, 255, 0.2);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            transition: transform 0.06s ease, box-shadow 0.06s ease;
+        }
+        
+        .orb-glow:active {
+            box-shadow: 
+                0 0 50px rgba(0, 243, 255, 0.9),
+                0 0 100px rgba(0, 243, 255, 0.6),
+                0 0 150px rgba(255, 0, 170, 0.4),
+                inset 0 0 50px rgba(0, 243, 255, 0.4);
+            transform: scale(0.93);
+        }
+        
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFly 0.8s ease-out forwards;
+        }
+        
+        @keyframes particleFly {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .chill-number {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .tab-active {
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), rgba(157, 0, 255, 0.2));
+            border-color: rgba(0, 243, 255, 0.5);
+        }
+        
+        .producer-card {
+            transition: all 0.3s ease;
+        }
+        
+        .producer-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 243, 255, 0.2);
+        }
+        
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+        }
+        
+        .btn-magenta-glow:hover {
+            box-shadow: 0 0 20px rgba(255, 0, 170, 0.6);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #00f3ff, #9d00ff, #ff00aa);
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .floating-chill {
+            position: absolute;
+            color: #00f3ff;
+            font-weight: bold;
+            font-size: 14px;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-60px) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #00f3ff, #9d00ff);
+            border-radius: 3px;
+        }
+        
+        .connected-wallet {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 255, 136, 0.1));
+            border-color: rgba(0, 255, 136, 0.5);
+        }
+
+        .achievement-card-locked {
+            filter: grayscale(80%);
+            opacity: 0.5;
+        }
+
+        .achievement-toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            z-index: 9999;
+            animation: toastIn 0.4s ease forwards;
+            max-width: 320px;
+            width: 90%;
+        }
+
+        @keyframes toastIn {
+            0% { transform: translateX(-50%) translateY(-30px); opacity: 0; }
+            100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        .achievement-toast.toast-out {
+            animation: toastOut 0.4s ease forwards;
+        }
+
+        @keyframes toastOut {
+            0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(-30px); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="fixed inset-0 z-50 glass-strong flex flex-col items-center justify-center p-6">
+        <div class="text-center max-w-md w-full">
+            <p class="text-neon-magenta text-sm tracking-widest mb-2 font-orbitron">CHILL VERSE PRESENTS</p>
+            <h1 class="text-5xl md:text-7xl font-black font-orbitron mb-8 neon-text-cyan tracking-tighter">IDLE<br>VERSE</h1>
+            <div class="glass rounded-2xl p-6 space-y-4">
+                <div>
+                    <label class="block text-neon-cyan text-sm mb-2 tracking-wide">YOUR CHILL HANDLE</label>
+                    <input type="text" id="usernameInput" placeholder="Enter your name..."
+                        class="w-full bg-black/30 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:border-neon-cyan focus:outline-none transition-colors text-center font-orbitron">
+                </div>
+                <div>
+                    <label class="block text-neon-purple text-sm mb-2 tracking-wide">EMAIL (FOR CHILL VERSE UPDATES)</label>
+                    <input type="email" id="emailInput" placeholder="your@email.com"
+                        class="w-full bg-black/30 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:border-neon-purple focus:outline-none transition-colors text-center">
+                </div>
+                <button id="enterBtn" class="w-full bg-gradient-to-r from-neon-cyan/20 to-neon-purple/20 border border-neon-cyan/50 rounded-xl py-4 mt-4 font-orbitron font-bold text-lg tracking-wider hover:from-neon-cyan/30 hover:to-neon-purple/30 transition-all btn-glow">
+                    ENTER THE VERSE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Game -->
+    <div id="mainGame" class="hidden min-h-screen flex flex-col relative z-10">
+
+        <!-- ===== TOP BAR ===== -->
+        <div class="glass-strong px-4 py-3 sticky top-0 z-40">
+            <div class="flex items-center justify-between max-w-lg mx-auto">
+                <!-- Left: Hamburger + Username -->
+                <div class="flex items-center gap-3">
+                    <button id="menuToggleBtn" class="text-neon-cyan hover:text-white transition-colors p-1">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <button id="editNameBtn" class="flex items-center gap-1 text-neon-cyan hover:text-white transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                        <span id="displayUsername" class="font-orbitron text-sm">Chiller</span>
+                    </button>
+                </div>
+                <!-- Right: Diamond counter + Settings gear -->
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-1 text-neon-magenta">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                        </svg>
+                        <span id="diamondCount" class="font-orbitron font-bold text-sm">0</span>
+                    </div>
+                    <button id="settingsToggleBtn" class="text-white/60 hover:text-neon-cyan transition-colors p-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Chills counter row -->
+            <div class="text-center mt-2">
+                <div class="flex items-center justify-center gap-2">
+                    <span id="chillCount" class="text-4xl md:text-5xl font-black font-orbitron neon-text-cyan chill-number">0</span>
+                    <span class="text-neon-cyan text-xl">Chills</span>
+                </div>
+                <div class="text-white/60 text-sm mt-0.5">
+                    <span id="cpsDisplay" class="text-neon-purple font-bold">0</span> Chills/s
+                </div>
+            </div>
+
+            <!-- Settings Dropdown (hidden by default) -->
+            <div id="settingsDropdown" class="hidden mt-3 pt-3 border-t border-white/10 space-y-3 max-w-lg mx-auto">
+                <div class="flex items-center justify-between">
+                    <span class="text-white/70 text-sm">Chill Handle</span>
+                    <button id="changeNameBtn" class="text-neon-cyan hover:text-white transition-colors text-sm">Change</button>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-white/70 text-sm">Saved Email</span>
+                    <span id="savedEmail" class="text-white/40 text-xs"></span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-white/70 text-sm">Offline Progress</span>
+                    <button id="toggleOffline" class="w-12 h-6 rounded-full bg-neon-green/30 border border-neon-green/50 relative transition-colors">
+                        <span class="absolute right-1 top-1 w-4 h-4 rounded-full bg-neon-green transition-all"></span>
+                    </button>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-white/70 text-sm">Particles</span>
+                    <button id="toggleParticles" class="w-12 h-6 rounded-full bg-neon-green/30 border border-neon-green/50 relative transition-colors">
+                        <span class="absolute right-1 top-1 w-4 h-4 rounded-full bg-neon-green transition-all"></span>
+                    </button>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-white/70 text-sm">Music</span>
+                    <button id="toggleMusic" class="w-12 h-6 rounded-full bg-neon-green/30 border border-neon-green/50 relative transition-colors">
+                        <span class="absolute right-1 top-1 w-4 h-4 rounded-full bg-neon-green transition-all"></span>
+                    </button>
+                </div>
+                <button id="resetGameBtn" class="w-full bg-red-500/20 border border-red-500/50 rounded-xl py-2 text-red-400 font-orbitron font-bold text-sm hover:bg-red-500/30 transition-all">
+                    RESET GAME
+                </button>
+                <p class="text-white/25 text-xs text-center">Last saved: <span id="lastSaved">Never</span></p>
+            </div>
+        </div>
+
+        <!-- ===== LEFT SLIDE-OUT MENU ===== -->
+        <!-- Overlay -->
+        <div id="menuOverlay" class="hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"></div>
+        <!-- Drawer -->
+        <div id="sideMenu" class="fixed top-0 left-0 h-full w-64 z-50 glass-strong transform -translate-x-full transition-transform duration-300 flex flex-col">
+            <!-- Menu header -->
+            <div class="p-5 border-b border-white/10">
+                <p class="text-neon-magenta text-xs tracking-widest font-orbitron mb-1">CHILL VERSE</p>
+                <h2 class="font-orbitron text-xl font-black neon-text-cyan">IDLE VERSE</h2>
+            </div>
+            <!-- Nav links -->
+            <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+                <button class="side-nav-btn tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all tab-active text-left" data-tab="Home">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    <span class="font-orbitron text-sm">Home</span>
+                </button>
+                <button class="side-nav-btn tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all opacity-60 hover:opacity-100 text-left" data-tab="Shop">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                    <span class="font-orbitron text-sm">Shop</span>
+                </button>
+                <button class="side-nav-btn tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all opacity-60 hover:opacity-100 text-left" data-tab="Diamonds">
+                    <svg class="w-5 h-5 flex-shrink-0 text-neon-magenta" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+                    <span class="font-orbitron text-sm">Diamonds</span>
+                </button>
+                <button class="side-nav-btn tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all opacity-60 hover:opacity-100 text-left" data-tab="Web3">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <span class="font-orbitron text-sm">Web3</span>
+                </button>
+                <button class="side-nav-btn tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all opacity-60 hover:opacity-100 text-left" data-tab="NFTs">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span class="font-orbitron text-sm">NFTs</span>
+                </button>
+                <button class="side-nav-btn tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all opacity-60 hover:opacity-100 text-left" data-tab="Stake">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
+                    <span class="font-orbitron text-sm">Stake</span>
+                </button>
+                <button class="side-nav-btn tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all opacity-60 hover:opacity-100 text-left" data-tab="Achievements">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                    <span class="font-orbitron text-sm">Trophies</span>
+                </button>
+            </nav>
+            <!-- Menu footer branding -->
+            <div class="p-4 border-t border-white/10 text-center">
+                <p class="text-white/20 text-xs">Version 1.1.0 • Made with Chill</p>
+            </div>
+        </div>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <div class="flex-1 p-4 pb-20 overflow-y-auto">
+
+            <!-- HOME TAB -->
+            <div id="tabHome" class="tab-content max-w-lg mx-auto">
+                <div class="flex flex-col items-center py-8">
+                    <div class="relative">
+                        <button id="chillCore" class="w-48 h-48 md:w-56 md:h-56 rounded-full bg-gradient-to-br from-neon-cyan/30 via-neon-purple/20 to-neon-magenta/30 border-2 border-neon-cyan/50 orb-glow relative" style="cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;display:block;padding:0;overflow:hidden;">
+                            <!-- Full-size transparent overlay to capture all taps across the entire circle -->
+                            <span class="absolute inset-0 rounded-full z-20" style="display:block;"></span>
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-neon-cyan/10 to-neon-purple/10 animate-pulse" style="pointer-events:none;"></div>
+                            <span class="absolute inset-0 flex flex-col items-center justify-center gap-0 z-10" style="pointer-events:none;">
+                                <span class="font-orbitron font-bold text-lg text-white/80">CHILL</span>
+                                <span class="font-orbitron font-black text-2xl neon-text-cyan">CORE</span>
+                                <span class="text-xs text-white/50 mt-1">+<span id="clickPowerDisplay">1</span> per click</span>
+                            </span>
+                        </button>
+                        <div class="absolute -inset-4 rounded-full border border-neon-cyan/20 animate-ping opacity-30"></div>
+                    </div>
+                    <p class="text-white/40 text-sm mt-6 text-center">Tap the Core to generate Chills</p>
+                </div>
+                <!-- Offline Progress -->
+                <div id="offlineProgress" class="hidden glass rounded-xl p-4 mb-4 border-l-4 border-neon-green">
+                    <div class="flex items-center gap-2 text-neon-green">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span class="font-bold">Offline Progress</span>
+                    </div>
+                    <p class="text-white/70 text-sm mt-1">You earned <span id="offlineChills" class="text-neon-cyan font-bold">0</span> Chills while away!</p>
+                </div>
+                <!-- Owned Producers -->
+                <div class="glass rounded-2xl p-4">
+                    <h3 class="font-orbitron text-neon-purple mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        YOUR PRODUCERS
+                    </h3>
+                    <div id="ownedProducersList" class="space-y-2">
+                        <p class="text-white/40 text-center py-4">No producers yet. Visit the Production Shop!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHOP TAB -->
+            <div id="tabShop" class="tab-content hidden max-w-lg mx-auto">
+                <h2 class="font-orbitron text-2xl neon-text-cyan mb-4 text-center">PRODUCTION SHOP</h2>
+                <div id="shopGrid" class="space-y-3 mb-8"></div>
+
+                <!-- ARTEFACTS SECTION -->
+                <div class="border-t border-white/10 pt-6">
+                    <h2 class="font-orbitron text-xl neon-text-purple mb-1 text-center">⚗️ ARTEFACTS</h2>
+                    <p class="text-white/40 text-xs text-center mb-4">Collected artefacts appear in your NFT vault</p>
+                    <div id="artefactsShopGrid" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- DIAMONDS TAB -->
+            <div id="tabDiamonds" class="tab-content hidden max-w-lg mx-auto">
+                <div class="text-center py-6">
+                    <div class="inline-flex items-center gap-2 glass rounded-full px-6 py-3">
+                        <svg class="w-6 h-6 text-neon-magenta" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+                        <span id="diamondCountBig" class="text-3xl font-orbitron font-black neon-text-magenta">0</span>
+                        <span class="text-neon-magenta">Diamonds</span>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-6 mb-6 text-center border border-neon-magenta/30">
+                    <h3 class="font-orbitron text-xl neon-text-magenta mb-2">ASCEND TO DIAMOND VERSE</h3>
+                    <p class="text-white/60 text-sm mb-4">Reset your progress for permanent Diamonds</p>
+                    <div class="glass rounded-xl p-3 mb-4">
+                        <p class="text-white/70 text-sm">You will earn:</p>
+                        <p class="text-2xl font-orbitron font-bold text-neon-magenta">+<span id="ascendDiamonds">0</span> Diamonds</p>
+                    </div>
+                    <button id="ascendBtn" class="w-full bg-gradient-to-r from-neon-magenta/30 to-neon-purple/30 border border-neon-magenta/50 rounded-xl py-4 font-orbitron font-bold tracking-wider hover:from-neon-magenta/40 hover:to-neon-purple/40 transition-all btn-magenta-glow">
+                        ASCEND NOW
+                    </button>
+                </div>
+                <h3 class="font-orbitron text-neon-cyan mb-4">DIAMOND UPGRADES</h3>
+                <div id="diamondShop" class="space-y-3"></div>
+            </div>
+
+            <!-- WEB3 TAB -->
+            <div id="tabWeb3" class="tab-content hidden max-w-lg mx-auto">
+                <h2 class="font-orbitron text-2xl neon-text-cyan mb-6 text-center">WEB3 VERSE</h2>
+                <div class="glass rounded-2xl p-6 mb-6 text-center">
+                    <div id="walletDisconnected">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        <p class="text-white/60 mb-4">Connect your wallet for +25% production bonus</p>
+                        <button id="connectWalletBtn" class="bg-gradient-to-r from-orange-500/30 to-orange-600/30 border border-orange-500/50 rounded-xl px-8 py-3 font-orbitron font-bold hover:from-orange-500/40 hover:to-orange-600/40 transition-all">CONNECT WALLET</button>
+                    </div>
+                    <div id="walletConnected" class="hidden">
+                        <div class="flex items-center justify-center gap-2 text-neon-green mb-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <span class="font-bold">CONNECTED</span>
+                        </div>
+                        <p id="walletAddress" class="font-mono text-sm text-white/70 bg-black/30 rounded-lg px-4 py-2"></p>
+                        <div class="mt-4 p-3 bg-neon-green/10 rounded-xl border border-neon-green/30">
+                            <p class="text-neon-green text-sm">+25% Global Production Active!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-6">
+                    <h3 class="font-orbitron text-neon-cyan mb-2">VERSE STATS</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between py-2 border-b border-white/10">
+                            <span class="text-white/60">NFTs Minted</span>
+                            <span id="web3NftCount" class="text-neon-purple font-bold">0</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-white/10">
+                            <span class="text-white/60">Artefacts Owned</span>
+                            <span id="web3ArtefactCount" class="text-neon-cyan font-bold">0</span>
+                        </div>
+                        <div class="flex justify-between py-2">
+                            <span class="text-white/60">Wallet Status</span>
+                            <span id="web3WalletStatus" class="text-white/40 font-bold">Disconnected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACHIEVEMENTS TAB -->
+            <div id="tabAchievements" class="tab-content hidden max-w-lg mx-auto">
+                <h2 class="font-orbitron text-2xl neon-text-cyan mb-2 text-center">ACHIEVEMENTS</h2>
+                <p id="achievementProgress" class="text-center text-white/50 text-sm mb-6">0 / 0 Unlocked</p>
+                <div id="achievementGrid" class="space-y-3"></div>
+            </div>
+
+            <!-- NFTs TAB -->
+            <div id="tabNFTs" class="tab-content hidden max-w-lg mx-auto">
+                <h2 class="font-orbitron text-2xl neon-text-cyan mb-2 text-center">NFT VAULT</h2>
+                <p class="text-center text-white/40 text-xs mb-5">Mint takes 5h 30m • One mint at a time</p>
+
+                <!-- Mint Status -->
+                <div id="nftMintStatus" class="glass rounded-2xl p-5 mb-5 text-center border border-neon-purple/30">
+                    <div id="nftMintIdle">
+                        <p class="text-neon-purple font-orbitron font-bold mb-1">START A MINT</p>
+                        <p class="text-white/50 text-sm mb-4">Cost: <span class="text-neon-cyan font-bold">10,000 Chills</span> + <span class="text-neon-magenta font-bold">10 Diamonds</span></p>
+                        <button id="startMintBtn" class="w-full bg-gradient-to-r from-neon-purple/30 to-neon-magenta/30 border border-neon-purple/50 rounded-xl py-3 font-orbitron font-bold hover:from-neon-purple/40 hover:to-neon-magenta/40 transition-all">🖼️ BEGIN MINT</button>
+                    </div>
+                    <div id="nftMintActive" class="hidden">
+                        <p class="text-neon-cyan font-orbitron font-bold mb-2">MINTING IN PROGRESS</p>
+                        <div class="w-full bg-white/10 rounded-full h-3 mb-2">
+                            <div id="mintProgressBar" class="bg-gradient-to-r from-neon-cyan to-neon-purple h-3 rounded-full transition-all duration-1000" style="width:0%"></div>
+                        </div>
+                        <p id="mintTimeLeft" class="text-white/60 text-sm">Calculating...</p>
+                        <button id="cancelMintBtn" class="mt-3 text-white/30 text-xs hover:text-red-400 transition-colors">Cancel mint</button>
+                    </div>
+                    <div id="nftMintReady" class="hidden">
+                        <p class="text-neon-green font-orbitron font-bold text-lg mb-2">✅ MINT COMPLETE!</p>
+                        <button id="claimNftBtn" class="w-full bg-gradient-to-r from-neon-green/30 to-neon-cyan/30 border border-neon-green/50 rounded-xl py-3 font-orbitron font-bold hover:from-neon-green/40 hover:to-neon-cyan/40 transition-all">🎁 CLAIM NFT</button>
+                    </div>
+                </div>
+
+                <!-- NFT Collection -->
+                <h3 class="font-orbitron text-neon-purple mb-3 text-sm tracking-widest">YOUR COLLECTION</h3>
+                <div id="nftCollection" class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="col-span-2 text-center text-white/30 py-6 text-sm">No NFTs yet. Start a mint!</div>
+                </div>
+
+                <!-- Artefacts Section -->
+                <div class="border-t border-white/10 pt-5">
+                    <h3 class="font-orbitron text-neon-cyan mb-1 text-sm tracking-widest">⚗️ ARTEFACTS VAULT</h3>
+                    <p class="text-white/30 text-xs mb-4">Items purchased from the Shop</p>
+                    <div id="artefactsVault" class="grid grid-cols-2 gap-3">
+                        <div class="col-span-2 text-center text-white/30 py-4 text-sm">No artefacts yet. Visit the Shop!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAKE TAB -->
+            <div id="tabStake" class="tab-content hidden max-w-lg mx-auto">
+                <h2 class="font-orbitron text-2xl neon-text-cyan mb-2 text-center">CHILL STAKE</h2>
+                <p class="text-center text-white/40 text-xs mb-5">1-hour staking period • Results are randomized</p>
+
+                <!-- Chart area -->
+                <div class="glass rounded-2xl p-4 mb-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-orbitron text-xs text-white/50">CHILL/STAKE INDEX</span>
+                        <span id="stakeChartTrend" class="text-xs font-bold text-neon-green">▲ LIVE</span>
+                    </div>
+                    <canvas id="stakeChart" height="100" style="width:100%;height:100px;"></canvas>
+                </div>
+
+                <!-- Current stake -->
+                <div id="stakeIdlePanel" class="glass rounded-2xl p-5 mb-4 border border-neon-cyan/20">
+                    <p class="font-orbitron text-neon-cyan mb-4 text-center">PLACE YOUR STAKE</p>
+                    <div class="mb-4">
+                        <label class="text-white/60 text-xs block mb-1">AMOUNT (Chills)</label>
+                        <input id="stakeAmountInput" type="number" min="100" placeholder="Min. 100 Chills"
+                            class="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white text-center font-orbitron focus:border-neon-cyan focus:outline-none">
+                        <p class="text-white/30 text-xs text-center mt-1">Balance: <span id="stakeBalanceDisplay">0</span> Chills</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button id="stakeBuyBtn" class="py-4 rounded-xl bg-neon-green/20 border border-neon-green/50 text-neon-green font-orbitron font-bold text-lg hover:bg-neon-green/30 transition-all">
+                            ⬆ BUY
+                        </button>
+                        <button id="stakeSellBtn" class="py-4 rounded-xl bg-red-500/20 border border-red-500/50 text-red-400 font-orbitron font-bold text-lg hover:bg-red-500/30 transition-all">
+                            ⬇ SELL
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active stake -->
+                <div id="stakeActivePanel" class="hidden glass rounded-2xl p-5 mb-4 border border-neon-purple/30">
+                    <p class="font-orbitron text-neon-purple text-center mb-3">STAKE IN PROGRESS</p>
+                    <div class="flex justify-between text-sm mb-3">
+                        <span class="text-white/60">Staked</span>
+                        <span id="stakeAmountDisplay" class="text-neon-cyan font-bold">0 Chills</span>
+                    </div>
+                    <div class="flex justify-between text-sm mb-3">
+                        <span class="text-white/60">Position</span>
+                        <span id="stakePositionDisplay" class="font-bold">—</span>
+                    </div>
+                    <div class="w-full bg-white/10 rounded-full h-2 mb-2">
+                        <div id="stakeProgressBar" class="bg-gradient-to-r from-neon-purple to-neon-cyan h-2 rounded-full transition-all duration-1000" style="width:0%"></div>
+                    </div>
+                    <p id="stakeTimeLeft" class="text-white/50 text-xs text-center">Calculating...</p>
+                </div>
+
+                <!-- Stake history -->
+                <div class="glass rounded-2xl p-4">
+                    <p class="font-orbitron text-xs text-white/40 tracking-widest mb-3">STAKE HISTORY</p>
+                    <div id="stakeHistory" class="space-y-2 text-sm text-white/40 text-center py-2">No stakes yet</div>
+                </div>
+            </div>
+
+            <!-- ABOUT TAB -->
+            <div id="tabAbout" class="tab-content hidden max-w-lg mx-auto">
+                <h2 class="font-orbitron text-2xl neon-text-cyan mb-6 text-center">ABOUT</h2>
+                <div class="glass rounded-2xl p-6 text-center mb-6">
+                    <h3 class="font-orbitron text-xl neon-text-magenta mb-4">THE VERSE</h3>
+                    <p class="text-white/70 leading-relaxed">Idle Verse is the endless chill realm of the Chill Verse WhatsApp group. There is no end goal. Just chill harder, ascend higher, and let the diamonds flow.</p>
+                </div>
+                <div class="glass rounded-2xl p-6">
+                    <h3 class="font-orbitron text-neon-purple mb-4">CREDITS</h3>
+                    <div class="space-y-3 text-white/70">
+                        <p class="flex items-center gap-2"><span class="text-neon-cyan">Built by:</span><span>Presido, Victor-vk.</span></p>
+                        <p class="flex items-center gap-2"><span class="text-neon-cyan">Location:</span><span>Nigeria</span></p>
+                        <p class="flex items-center gap-2"><span class="text-neon-cyan">For:</span><span>@Chill Verse</span></p>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <p class="text-white/30 text-xs">Version 1.0.0 • Made with Chill</p>
+                </div>
+            </div>
+
+            <!-- CONTACTS TAB -->
+            <div id="tabContacts" class="tab-content hidden max-w-lg mx-auto">
+                <h2 class="font-orbitron text-2xl neon-text-cyan mb-6 text-center">CONTACTS</h2>
+                <div class="space-y-4">
+                    <a href="https://chat.whatsapp.com/F7hNH78V3TPISp9HIZHqLa?mode=gi_t" target="_blank" rel="noopener noreferrer"
+                        class="flex items-center gap-4 p-4 glass rounded-2xl hover:bg-green-500/10 border border-transparent hover:border-green-500/30 transition-all group">
+                        <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 group-hover:bg-green-500/30 transition-all">
+                            <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-bold text-white group-hover:text-green-300 transition-colors">WhatsApp</p>
+                            <p class="text-white/50 text-sm">Join the Chill Verse group</p>
+                        </div>
+                        <svg class="w-5 h-5 text-white/30 ml-auto group-hover:text-green-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a>
+
+                    <a href="/cdn-cgi/l/email-protection#bfddd3dcd4cccecadecdda8f8f8effd8d2ded6d391dcd0d2" class="flex items-center gap-4 p-4 glass rounded-2xl hover:bg-neon-cyan/10 border border-transparent hover:border-neon-cyan/30 transition-all group">
+                        <div class="w-12 h-12 rounded-full bg-neon-cyan/20 flex items-center justify-center flex-shrink-0 group-hover:bg-neon-cyan/30 transition-all">
+                            <svg class="w-6 h-6 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="font-bold text-white group-hover:text-neon-cyan transition-colors">Email</p>
+                            <p class="text-white/50 text-sm"><span class="__cf_email__" data-cfemail="d4b6b8b7bfa7a5a1b5a6b1e4e4e594b3b9b5bdb8fab7bbb9">[email&#160;protected]</span></p>
+                        </div>
+                        <svg class="w-5 h-5 text-white/30 ml-auto group-hover:text-neon-cyan transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a>
+
+                    <a href="https://x.com/YoungPresido34" target="_blank" rel="noopener noreferrer"
+                        class="flex items-center gap-4 p-4 glass rounded-2xl hover:bg-neon-purple/10 border border-transparent hover:border-neon-purple/30 transition-all group">
+                        <div class="w-12 h-12 rounded-full bg-neon-purple/20 flex items-center justify-center flex-shrink-0 group-hover:bg-neon-purple/30 transition-all">
+                            <svg class="w-6 h-6 text-neon-purple" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </div>
+                        <div>
+                            <p class="font-bold text-white group-hover:text-neon-purple transition-colors">X / Twitter</p>
+                            <p class="text-white/50 text-sm">@YoungPresido34</p>
+                        </div>
+                        <svg class="w-5 h-5 text-white/30 ml-auto group-hover:text-neon-purple transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== FOOTER NAV (About + Contacts only) ===== -->
+        <div class="glass-strong fixed bottom-0 left-0 right-0 px-4 py-2 z-40">
+            <div class="flex justify-center gap-6 max-w-lg mx-auto">
+                <button class="tab-btn flex flex-col items-center gap-1 px-6 py-2 rounded-xl transition-all opacity-60 hover:opacity-100" data-tab="About">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="text-xs font-orbitron">About</span>
+                </button>
+                <button class="tab-btn flex flex-col items-center gap-1 px-6 py-2 rounded-xl transition-all opacity-60 hover:opacity-100" data-tab="Contacts">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    <span class="text-xs font-orbitron">Contacts</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Background Music -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Sounds/Lights.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Ascend Confirmation Modal -->
+    <div id="ascendModal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-6 max-w-sm w-full text-center">
+            <svg class="w-16 h-16 mx-auto mb-4 text-neon-magenta" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+            </svg>
+            <h3 class="font-orbitron text-xl neon-text-magenta mb-2">ASCEND?</h3>
+            <p class="text-white/70 mb-4">This will reset ALL your progress but you'll keep <span id="modalDiamonds" class="text-neon-magenta font-bold">0</span> Diamonds permanently.</p>
+            <div class="flex gap-3">
+                <button id="cancelAscend" class="flex-1 py-3 rounded-xl border border-white/30 text-white/70 hover:bg-white/10 transition-all">CANCEL</button>
+                <button id="confirmAscend" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-neon-magenta/30 to-neon-purple/30 border border-neon-magenta/50 text-white font-bold hover:from-neon-magenta/40 hover:to-neon-purple/40 transition-all">ASCEND</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reset Confirmation Modal -->
+    <div id="resetModal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-6 max-w-sm w-full text-center">
+            <svg class="w-16 h-16 mx-auto mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <h3 class="font-orbitron text-xl text-red-400 mb-2">RESET GAME?</h3>
+            <p class="text-white/70 mb-4">This will DELETE ALL your progress forever. This cannot be undone!</p>
+            <div class="flex gap-3">
+                <button id="cancelReset" class="flex-1 py-3 rounded-xl border border-white/30 text-white/70 hover:bg-white/10 transition-all">CANCEL</button>
+                <button id="confirmReset" class="flex-1 py-3 rounded-xl bg-red-500/30 border border-red-500/50 text-red-400 font-bold hover:bg-red-500/40 transition-all">DELETE</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Name Modal -->
+    <div id="editNameModal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-6 max-w-sm w-full">
+            <h3 class="font-orbitron text-xl neon-text-cyan mb-4 text-center">CHANGE HANDLE</h3>
+            <input type="text" id="newNameInput" placeholder="New chill handle..." 
+                class="w-full bg-black/30 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/40 focus:border-neon-cyan focus:outline-none transition-colors text-center font-orbitron mb-4">
+            <div class="flex gap-3">
+                <button id="cancelEditName" class="flex-1 py-3 rounded-xl border border-white/30 text-white/70 hover:bg-white/10 transition-all">CANCEL</button>
+                <button id="saveName" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-neon-cyan/30 to-neon-purple/30 border border-neon-cyan/50 text-white font-bold hover:from-neon-cyan/40 hover:to-neon-purple/40 transition-all">SAVE</button>
+            </div>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // ==================== ACHIEVEMENTS ====================
+        // reward types: 'cps_mult', 'click_mult', 'click_flat', 'diamonds', 'chills', 'producer_mult'
+        const ACHIEVEMENTS = [
+            // ── CLICKING ─────────────────────────────────────────────────────
+            { id: 'first_click',      category:'clicking',  icon:'👆', name:'First Touch',         desc:'Click the Chill Core for the first time',   check:s=>s.totalClicks>=1,      reward:null },
+            { id: 'clicks_50',        category:'clicking',  icon:'✌️', name:'Warm Fingers',         desc:'Click 50 times',                            check:s=>s.totalClicks>=50,     reward:{type:'click_flat', val:1, label:'+1 Click Power'} },
+            { id: 'clicks_100',       category:'clicking',  icon:'🖱️', name:'Clicker',              desc:'Click 100 times',                           check:s=>s.totalClicks>=100,    reward:{type:'chills', val:500, label:'+500 Chills'} },
+            { id: 'clicks_500',       category:'clicking',  icon:'🔥', name:'Tap Fever',            desc:'Click 500 times',                           check:s=>s.totalClicks>=500,    reward:{type:'click_flat', val:2, label:'+2 Click Power'} },
+            { id: 'clicks_1000',      category:'clicking',  icon:'⚡', name:'Click Maniac',         desc:'Click 1,000 times',                         check:s=>s.totalClicks>=1000,   reward:{type:'click_mult', val:0.10, label:'+10% Click Power'} },
+            { id: 'clicks_5000',      category:'clicking',  icon:'💢', name:'Relentless',           desc:'Click 5,000 times',                         check:s=>s.totalClicks>=5000,   reward:{type:'click_flat', val:5, label:'+5 Click Power'} },
+            { id: 'clicks_10000',     category:'clicking',  icon:'🌀', name:'Tap God',              desc:'Click 10,000 times',                        check:s=>s.totalClicks>=10000,  reward:{type:'click_mult', val:0.25, label:'+25% Click Power'} },
+            { id: 'clicks_50000',     category:'clicking',  icon:'🌌', name:'Infinity Tap',         desc:'Click 50,000 times',                        check:s=>s.totalClicks>=50000,  reward:{type:'click_mult', val:0.50, label:'+50% Click Power'} },
+
+            // ── CHILLS EARNED ────────────────────────────────────────────────
+            { id: 'chills_100',       category:'chills',    icon:'❄️', name:'Chilly Start',         desc:'Earn 100 total Chills',                     check:s=>s.totalChills>=100,          reward:null },
+            { id: 'chills_1k',        category:'chills',    icon:'🌊', name:'Chill Wave',           desc:'Earn 1,000 total Chills',                   check:s=>s.totalChills>=1000,         reward:{type:'chills', val:1000, label:'+1,000 Chills'} },
+            { id: 'chills_10k',       category:'chills',    icon:'🧊', name:'Frost Bloom',          desc:'Earn 10,000 total Chills',                  check:s=>s.totalChills>=10000,        reward:{type:'cps_mult', val:0.05, label:'+5% Global CPS'} },
+            { id: 'chills_100k',      category:'chills',    icon:'💫', name:'Chill Storm',          desc:'Earn 100,000 total Chills',                 check:s=>s.totalChills>=100000,       reward:{type:'chills', val:50000, label:'+50,000 Chills'} },
+            { id: 'chills_1m',        category:'chills',    icon:'🌌', name:'Chill Universe',       desc:'Earn 1 Million total Chills',               check:s=>s.totalChills>=1e6,          reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'chills_10m',       category:'chills',    icon:'🚀', name:'Chill Rocket',         desc:'Earn 10 Million total Chills',              check:s=>s.totalChills>=1e7,          reward:{type:'diamonds', val:5, label:'+5 Diamonds'} },
+            { id: 'chills_100m',      category:'chills',    icon:'🌠', name:'Chill Comet',          desc:'Earn 100 Million total Chills',             check:s=>s.totalChills>=1e8,          reward:{type:'cps_mult', val:0.15, label:'+15% Global CPS'} },
+            { id: 'chills_1b',        category:'chills',    icon:'🪐', name:'Chill Galaxy',         desc:'Earn 1 Billion total Chills',               check:s=>s.totalChills>=1e9,          reward:{type:'diamonds', val:20, label:'+20 Diamonds'} },
+            { id: 'chills_1t',        category:'chills',    icon:'🌀', name:'Chill Multiverse',     desc:'Earn 1 Trillion total Chills',              check:s=>s.totalChills>=1e12,         reward:{type:'cps_mult', val:0.25, label:'+25% Global CPS'} },
+
+            // ── PRODUCERS OWNED ──────────────────────────────────────────────
+            { id: 'first_producer',   category:'producers', icon:'🏭', name:'First Factory',        desc:'Buy your first producer',                   check:s=>s.producers.some(p=>p.owned>=1),                           reward:{type:'chills', val:100, label:'+100 Chills'} },
+            { id: 'prod_5',           category:'producers', icon:'🔩', name:'Getting Started',      desc:'Own 5 producers total',                     check:s=>s.producers.reduce((a,p)=>a+p.owned,0)>=5,                 reward:{type:'cps_mult', val:0.05, label:'+5% Global CPS'} },
+            { id: 'prod_10',          category:'producers', icon:'🔧', name:'Getting Busy',         desc:'Own 10 producers total',                    check:s=>s.producers.reduce((a,p)=>a+p.owned,0)>=10,                reward:{type:'chills', val:5000, label:'+5,000 Chills'} },
+            { id: 'prod_25',          category:'producers', icon:'🏗️', name:'Workshop',             desc:'Own 25 producers total',                    check:s=>s.producers.reduce((a,p)=>a+p.owned,0)>=25,                reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'prod_50',          category:'producers', icon:'🏙️', name:'Verse Builder',        desc:'Own 50 producers total',                    check:s=>s.producers.reduce((a,p)=>a+p.owned,0)>=50,                reward:{type:'click_flat', val:3, label:'+3 Click Power'} },
+            { id: 'prod_100',         category:'producers', icon:'🌆', name:'Chill Empire',         desc:'Own 100 producers total',                   check:s=>s.producers.reduce((a,p)=>a+p.owned,0)>=100,               reward:{type:'cps_mult', val:0.15, label:'+15% Global CPS'} },
+            { id: 'prod_250',         category:'producers', icon:'🌃', name:'Mega Empire',          desc:'Own 250 producers total',                   check:s=>s.producers.reduce((a,p)=>a+p.owned,0)>=250,               reward:{type:'diamonds', val:10, label:'+10 Diamonds'} },
+            { id: 'prod_500',         category:'producers', icon:'🌐', name:'Infinite Factory',     desc:'Own 500 producers total',                   check:s=>s.producers.reduce((a,p)=>a+p.owned,0)>=500,               reward:{type:'cps_mult', val:0.25, label:'+25% Global CPS'} },
+            { id: 'prod_1000',        category:'producers', icon:'🚀', name:'Unstoppable',          desc:'Own 1,000 producers total',                 check:s=>s.producers.reduce((a,p)=>a+p.owned,0)>=1000,              reward:{type:'diamonds', val:25, label:'+25 Diamonds'} },
+            { id: 'all_producers',    category:'producers', icon:'🎛️', name:'Full Verse',           desc:'Own at least 1 of every producer',          check:s=>s.producers.every(p=>p.owned>=1),                          reward:{type:'cps_mult', val:0.20, label:'+20% Global CPS'} },
+            { id: 'all_prod_10',      category:'producers', icon:'💥', name:'Stacked',              desc:'Own at least 10 of every producer',         check:s=>s.producers.every(p=>p.owned>=10),                         reward:{type:'cps_mult', val:0.30, label:'+30% Global CPS'} },
+            { id: 'pod_100',          category:'producers', icon:'🟦', name:'Pod Farm',             desc:'Own 100 Neon Pods',                         check:s=>s.producers[0]?.owned>=100,                                reward:{type:'producer_mult', prodIdx:0, val:0.25, label:'+25% Neon Pod output'} },
+            { id: 'flicker_50',       category:'producers', icon:'🔵', name:'Flicker Gang',         desc:'Own 50 Holo Flickers',                      check:s=>s.producers[1]?.owned>=50,                                 reward:{type:'producer_mult', prodIdx:1, val:0.25, label:'+25% Holo Flicker output'} },
+            { id: 'drone_50',         category:'producers', icon:'🤖', name:'Drone Army',           desc:'Own 50 Quantum Drones',                     check:s=>s.producers[2]?.owned>=50,                                 reward:{type:'producer_mult', prodIdx:2, val:0.25, label:'+25% Quantum Drone output'} },
+
+            // ── CPS ──────────────────────────────────────────────────────────
+            { id: 'cps_1',            category:'cps',       icon:'🌬️', name:'Breeze',               desc:'Reach 1 Chill/s',                           check:_=>getCPS()>=1,     reward:null },
+            { id: 'cps_10',           category:'cps',       icon:'💨', name:'Wind',                 desc:'Reach 10 Chills/s',                         check:_=>getCPS()>=10,    reward:{type:'chills', val:500, label:'+500 Chills'} },
+            { id: 'cps_100',          category:'cps',       icon:'🌪️', name:'Vortex',               desc:'Reach 100 Chills/s',                        check:_=>getCPS()>=100,   reward:{type:'cps_mult', val:0.05, label:'+5% Global CPS'} },
+            { id: 'cps_1k',           category:'cps',       icon:'⚡', name:'Lightning',            desc:'Reach 1,000 Chills/s',                      check:_=>getCPS()>=1000,  reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'cps_10k',          category:'cps',       icon:'🌊', name:'Tsunami',              desc:'Reach 10,000 Chills/s',                     check:_=>getCPS()>=10000, reward:{type:'diamonds', val:5, label:'+5 Diamonds'} },
+            { id: 'cps_100k',         category:'cps',       icon:'🔱', name:'Trident',              desc:'Reach 100,000 Chills/s',                    check:_=>getCPS()>=100000,reward:{type:'cps_mult', val:0.15, label:'+15% Global CPS'} },
+            { id: 'cps_1m',           category:'cps',       icon:'🌠', name:'Singularity',          desc:'Reach 1 Million Chills/s',                  check:_=>getCPS()>=1e6,   reward:{type:'diamonds', val:15, label:'+15 Diamonds'} },
+            { id: 'cps_1b',           category:'cps',       icon:'🌌', name:'Godspeed',             desc:'Reach 1 Billion Chills/s',                  check:_=>getCPS()>=1e9,   reward:{type:'cps_mult', val:0.50, label:'+50% Global CPS'} },
+
+            // ── DIAMONDS ─────────────────────────────────────────────────────
+            { id: 'first_ascend',     category:'diamonds',  icon:'💎', name:'First Ascension',      desc:'Ascend for the first time',                 check:s=>s.totalAscensions>=1,  reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'ascend_3',         category:'diamonds',  icon:'🔷', name:'Veteran',              desc:'Ascend 3 times',                            check:s=>s.totalAscensions>=3,  reward:{type:'click_flat', val:5, label:'+5 Click Power'} },
+            { id: 'ascend_5',         category:'diamonds',  icon:'🌟', name:'Serial Ascender',      desc:'Ascend 5 times',                            check:s=>s.totalAscensions>=5,  reward:{type:'cps_mult', val:0.15, label:'+15% Global CPS'} },
+            { id: 'ascend_10',        category:'diamonds',  icon:'🏆', name:'Transcendent',         desc:'Ascend 10 times',                           check:s=>s.totalAscensions>=10, reward:{type:'diamonds', val:10, label:'+10 Diamonds'} },
+            { id: 'ascend_25',        category:'diamonds',  icon:'👑', name:'Eternal',              desc:'Ascend 25 times',                           check:s=>s.totalAscensions>=25, reward:{type:'cps_mult', val:0.50, label:'+50% Global CPS'} },
+            { id: 'diamonds_5',       category:'diamonds',  icon:'💠', name:'Diamond Dabbler',      desc:'Have 5 Diamonds at once',                   check:s=>s.diamonds>=5,         reward:{type:'chills', val:2000, label:'+2,000 Chills'} },
+            { id: 'diamonds_25',      category:'diamonds',  icon:'🔮', name:'Diamond Collector',    desc:'Have 25 Diamonds at once',                  check:s=>s.diamonds>=25,        reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'diamonds_100',     category:'diamonds',  icon:'💍', name:'Diamond Hoarder',      desc:'Have 100 Diamonds at once',                 check:s=>s.diamonds>=100,       reward:{type:'diamonds', val:10, label:'+10 Diamonds'} },
+            { id: 'diamonds_500',     category:'diamonds',  icon:'🌟', name:'Diamond Lord',         desc:'Have 500 Diamonds at once',                 check:s=>s.diamonds>=500,       reward:{type:'cps_mult', val:0.25, label:'+25% Global CPS'} },
+            { id: 'total_diamonds_50',category:'diamonds',  icon:'⚗️', name:'Alchemist',            desc:'Earn 50 total Diamonds (all-time)',          check:s=>(s.totalDiamonds||0)>=50,   reward:{type:'click_mult', val:0.15, label:'+15% Click Power'} },
+
+            // ── WEB3 ─────────────────────────────────────────────────────────
+            { id: 'wallet',           category:'web3',      icon:'🔗', name:'Web3 Chiller',         desc:'Connect your wallet',                       check:s=>s.walletConnected,     reward:{type:'cps_mult', val:0.05, label:'+5% Global CPS'} },
+            { id: 'nft_1',            category:'web3',      icon:'🖼️', name:'NFT Pioneer',          desc:'Mint your first NFT',                       check:s=>s.nftCount>=1,         reward:{type:'chills', val:10000, label:'+10,000 Chills'} },
+            { id: 'nft_3',            category:'web3',      icon:'🎨', name:'NFT Enthusiast',       desc:'Mint 3 NFTs',                               check:s=>s.nftCount>=3,         reward:{type:'click_flat', val:3, label:'+3 Click Power'} },
+            { id: 'nft_5',            category:'web3',      icon:'🏛️', name:'NFT Collector',        desc:'Mint 5 NFTs',                               check:s=>s.nftCount>=5,         reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'nft_10',           category:'web3',      icon:'🎭', name:'NFT Whale',            desc:'Mint 10 NFTs',                              check:s=>s.nftCount>=10,        reward:{type:'diamonds', val:15, label:'+15 Diamonds'} },
+
+            // ── SAVINGS / TIME ───────────────────────────────────────────────
+            { id: 'save_1',           category:'time',      icon:'💾', name:'Saved',                desc:'Save the game for the first time',          check:s=>!!s.lastSave,          reward:null },
+            { id: 'offline_1k',       category:'time',      icon:'😴', name:'While You Slept',      desc:'Earn 1,000 Chills offline',                 check:s=>(s.totalOfflineChills||0)>=1000,   reward:{type:'cps_mult', val:0.05, label:'+5% Global CPS'} },
+            { id: 'offline_1m',       category:'time',      icon:'🌙', name:'Dream Farmer',         desc:'Earn 1 Million Chills offline',             check:s=>(s.totalOfflineChills||0)>=1e6,    reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+
+            // ── MILESTONES / COMBO ───────────────────────────────────────────
+            { id: 'click_and_cps',    category:'milestones',icon:'⚖️', name:'Balanced',             desc:'Have 100+ click power and 100+ CPS',        check:s=>getClickPower()>=100&&getCPS()>=100,  reward:{type:'cps_mult', val:0.20, label:'+20% Global CPS'} },
+            { id: 'rich',             category:'milestones',icon:'💰', name:'Rolling in Chills',    desc:'Have 1 Million Chills at once',             check:s=>s.chills>=1e6,                        reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'mega_rich',        category:'milestones',icon:'🤑', name:'Chill Billionaire',    desc:'Have 1 Billion Chills at once',             check:s=>s.chills>=1e9,                        reward:{type:'diamonds', val:30, label:'+30 Diamonds'} },
+            { id: 'chill_100_cps',    category:'milestones',icon:'🏅', name:'Century',              desc:'Have exactly 100 CPS',                      check:s=>Math.floor(getCPS())===100,           reward:{type:'click_flat', val:10, label:'+10 Click Power'} },
+            { id: 'spend_1m',         category:'milestones',icon:'🛍️', name:'Big Spender',          desc:'Spend 1 Million Chills on producers',       check:s=>(s.totalSpent||0)>=1e6,               reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'spend_1b',         category:'milestones',icon:'💸', name:'Whale',                desc:'Spend 1 Billion Chills on producers',       check:s=>(s.totalSpent||0)>=1e9,               reward:{type:'diamonds', val:20, label:'+20 Diamonds'} },
+
+            // ── SECRET ──────────────────────────────────────────────────────
+            { id: 'secret_name',      category:'secret',    icon:'🕵️', name:'Who Are You?',         desc:'Change your Chill Handle',                  check:s=>s.nameChanges>=1,                     reward:{type:'chills', val:1000, label:'+1,000 Chills'} },
+            { id: 'secret_name3',     category:'secret',    icon:'🎭', name:'Identity Crisis',      desc:'Change your handle 3 times',                check:s=>s.nameChanges>=3,                     reward:{type:'click_flat', val:5, label:'+5 Click Power'} },
+            { id: 'secret_night',     category:'secret',    icon:'🌃', name:'Night Owl',            desc:'Play between midnight and 4 AM',            check:_=>{const h=new Date().getHours();return h>=0&&h<4;},  reward:{type:'cps_mult', val:0.15, label:'+15% Global CPS'} },
+            { id: 'secret_speed',     category:'secret',    icon:'🏎️', name:'Speed Runner',         desc:'Reach 1,000 total Chills in under 5 minutes',check:s=>(s.totalChills>=1000)&&((Date.now()-(s.sessionStart||Date.now()))<300000), reward:{type:'chills', val:5000, label:'+5,000 Chills'} },
+
+            // ── NFTs ─────────────────────────────────────────────────────────
+            { id: 'nft_first_mint',   category:'nfts',      icon:'🖼️', name:'Minted',               desc:'Claim your very first NFT from the vault',  check:s=>(s.ownedNfts||[]).length>=1,                                          reward:{type:'chills', val:50000, label:'+50,000 Chills'} },
+            { id: 'nft_common_3',     category:'nfts',      icon:'🃏', name:'Common Grind',         desc:'Own 3 Common NFTs',                         check:s=>(s.ownedNfts||[]).filter(n=>n.rarity==='common').length>=3,           reward:{type:'cps_mult', val:0.05, label:'+5% Global CPS'} },
+            { id: 'nft_common_10',    category:'nfts',      icon:'🎴', name:'Common Hoarder',       desc:'Own 10 Common NFTs',                        check:s=>(s.ownedNfts||[]).filter(n=>n.rarity==='common').length>=10,          reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'nft_rare_1',       category:'nfts',      icon:'🔷', name:'Rare Find',            desc:'Own your first Rare NFT',                   check:s=>(s.ownedNfts||[]).some(n=>n.rarity==='rare'),                         reward:{type:'diamonds', val:5, label:'+5 Diamonds'} },
+            { id: 'nft_rare_2',       category:'nfts',      icon:'💠', name:'Rare Collector',       desc:'Own both Rare NFTs',                        check:s=>{const r=s.ownedNfts||[];const names=new Set(r.filter(n=>n.rarity==='rare').map(n=>n.name));return names.size>=2;}, reward:{type:'cps_mult', val:0.15, label:'+15% Global CPS'} },
+            { id: 'nft_legend_1',     category:'nfts',      icon:'👑', name:'Legend Status',        desc:'Own a Legend NFT',                          check:s=>(s.ownedNfts||[]).some(n=>n.rarity==='legend'),                       reward:{type:'cps_mult', val:0.25, label:'+25% Global CPS'} },
+            { id: 'nft_legend_both',  category:'nfts',      icon:'🌟', name:'Verse Founders',       desc:'Own both Presido and Victor-vk Legend NFTs', check:s=>{const r=s.ownedNfts||[];const p=r.some(n=>n.name==='Presido Legend');const v=r.some(n=>n.name==='Victor-vk Legend');return p&&v;}, reward:{type:'cps_mult', val:0.50, label:'+50% Global CPS'} },
+            { id: 'nft_vault_5',      category:'nfts',      icon:'🗄️', name:'Vault Keeper',         desc:'Have 5 NFTs in your vault',                 check:s=>(s.ownedNfts||[]).length>=5,                                          reward:{type:'diamonds', val:10, label:'+10 Diamonds'} },
+            { id: 'nft_vault_15',     category:'nfts',      icon:'🏛️', name:'Verse Museum',         desc:'Have 15 NFTs in your vault',                check:s=>(s.ownedNfts||[]).length>=15,                                         reward:{type:'cps_mult', val:0.20, label:'+20% Global CPS'} },
+
+            // ── ARTEFACTS ────────────────────────────────────────────────────
+            { id: 'art_first',        category:'artefacts', icon:'⚗️', name:'Artefact Hunter',      desc:'Purchase your first artefact',              check:s=>Object.keys(s.artefactsOwned||{}).length>=1,                          reward:{type:'chills', val:100000, label:'+100,000 Chills'} },
+            { id: 'art_3',            category:'artefacts', icon:'🧪', name:'Collector',             desc:'Own 3 artefacts',                           check:s=>Object.keys(s.artefactsOwned||{}).length>=3,                          reward:{type:'cps_mult', val:0.05, label:'+5% Global CPS'} },
+            { id: 'art_7',            category:'artefacts', icon:'🔬', name:'Artefact Scholar',     desc:'Own 7 artefacts',                           check:s=>Object.keys(s.artefactsOwned||{}).length>=7,                          reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'art_12',           category:'artefacts', icon:'🏺', name:'Artefact Master',      desc:'Own 12 artefacts',                          check:s=>Object.keys(s.artefactsOwned||{}).length>=12,                         reward:{type:'diamonds', val:15, label:'+15 Diamonds'} },
+            { id: 'art_all',          category:'artefacts', icon:'💎', name:'Complete Collection',   desc:'Own all 20 artefacts',                      check:s=>Object.keys(s.artefactsOwned||{}).length>=20,                         reward:{type:'cps_mult', val:1.00, label:'+100% Global CPS'} },
+            { id: 'art_diamond_1',    category:'artefacts', icon:'🔮', name:'Diamond Taste',        desc:'Buy your first diamond artefact',           check:s=>['art_gem','art_gauntlet','art_amulet','art_codex','art_hourglass','art_wings','art_trident','art_throne'].some(id=>(s.artefactsOwned||{})[id]), reward:{type:'click_flat', val:10, label:'+10 Click Power'} },
+            { id: 'art_diamond_all',  category:'artefacts', icon:'👁️', name:'Diamond Vault',        desc:'Own all 8 diamond artefacts',               check:s=>['art_gem','art_gauntlet','art_amulet','art_codex','art_hourglass','art_wings','art_trident','art_throne'].every(id=>(s.artefactsOwned||{})[id]), reward:{type:'cps_mult', val:0.30, label:'+30% Global CPS'} },
+
+            // ── STAKING ──────────────────────────────────────────────────────
+            { id: 'stake_first',      category:'staking',   icon:'📊', name:'First Stake',          desc:'Place your first stake',                    check:s=>(s.stakeHistory||[]).length>=1,                                        reward:{type:'chills', val:50000, label:'+50,000 Chills'} },
+            { id: 'stake_win_1',      category:'staking',   icon:'📈', name:'In the Green',         desc:'Win your first stake',                      check:s=>(s.stakeHistory||[]).some(h=>h.won),                                  reward:{type:'cps_mult', val:0.05, label:'+5% Global CPS'} },
+            { id: 'stake_win_5',      category:'staking',   icon:'🏆', name:'Consistent Gains',     desc:'Win 5 stakes',                              check:s=>(s.stakeHistory||[]).filter(h=>h.won).length>=5,                      reward:{type:'cps_mult', val:0.10, label:'+10% Global CPS'} },
+            { id: 'stake_win_10',     category:'staking',   icon:'🤑', name:'Market Wizard',        desc:'Win 10 stakes',                             check:s=>(s.stakeHistory||[]).filter(h=>h.won).length>=10,                     reward:{type:'diamonds', val:10, label:'+10 Diamonds'} },
+            { id: 'stake_big',        category:'staking',   icon:'💰', name:'High Roller',          desc:'Stake at least 1 Million Chills at once',   check:s=>(s.stakeHistory||[]).some(h=>h.amount>=1e6),                          reward:{type:'cps_mult', val:0.15, label:'+15% Global CPS'} },
+            { id: 'stake_loss_brave', category:'staking',   icon:'💀', name:'Reckless',             desc:'Lose 3 stakes in a row',                    check:s=>{const h=s.stakeHistory||[];if(h.length<3)return false;return !h[0].won&&!h[1].won&&!h[2].won;}, reward:{type:'diamonds', val:5, label:'+5 Diamonds (sympathy bonus)'} },
+        ];
+
+        const CATEGORY_COLORS = {
+            clicking:   'neon-cyan',
+            chills:     'neon-cyan',
+            producers:  'neon-purple',
+            cps:        'neon-cyan',
+            diamonds:   'neon-magenta',
+            web3:       'neon-green',
+            time:       'neon-purple',
+            milestones: 'neon-magenta',
+            secret:     'yellow-400',
+            nfts:       'neon-purple',
+            artefacts:  'neon-cyan',
+            staking:    'neon-green',
+        };
+
+        const CATEGORY_LABELS = {
+            clicking:'CLICKING', chills:'CHILLS', producers:'PRODUCERS', cps:'PRODUCTION',
+            diamonds:'DIAMONDS', web3:'WEB3', time:'TIME & OFFLINE', milestones:'MILESTONES',
+            secret:'SECRET', nfts:'NFTs', artefacts:'ARTEFACTS', staking:'STAKING',
+        };
+
+        // Apply a reward immediately when an achievement is unlocked
+        function applyReward(reward) {
+            if (!reward) return;
+            switch(reward.type) {
+                case 'chills':
+                    gameState.chills += reward.val;
+                    gameState.totalChills += reward.val;
+                    break;
+                case 'diamonds':
+                    gameState.diamonds += reward.val;
+                    gameState.totalDiamonds = (gameState.totalDiamonds||0) + reward.val;
+                    break;
+                case 'click_flat':
+                    gameState.achievementClickBonus = (gameState.achievementClickBonus||0) + reward.val;
+                    break;
+                case 'click_mult':
+                    gameState.achievementClickMult = (gameState.achievementClickMult||1) * (1 + reward.val);
+                    break;
+                case 'cps_mult':
+                    gameState.achievementCpsMult = (gameState.achievementCpsMult||1) * (1 + reward.val);
+                    break;
+                case 'producer_mult':
+                    if (!gameState.producerMults) gameState.producerMults = {};
+                    const key = 'p' + reward.prodIdx;
+                    gameState.producerMults[key] = (gameState.producerMults[key]||1) * (1 + reward.val);
+                    break;
+            }
+        }
+
+        function updateAchievements() {
+            const newlyUnlocked = [];
+            ACHIEVEMENTS.forEach(a => {
+                if (!gameState.achievements[a.id] && a.check(gameState)) {
+                    gameState.achievements[a.id] = Date.now();
+                    applyReward(a.reward);
+                    newlyUnlocked.push(a);
+                }
+            });
+            newlyUnlocked.forEach((a, i) => {
+                setTimeout(() => showAchievementToast(a), i * 1800);
+            });
+            if (newlyUnlocked.length) saveGame();
+            renderAchievements();
+        }
+
+        function renderAchievements() {
+            const container = document.getElementById('achievementGrid');
+            if (!container) return;
+            const unlocked = Object.keys(gameState.achievements).length;
+            document.getElementById('achievementProgress').textContent = `${unlocked} / ${ACHIEVEMENTS.length} Unlocked`;
+
+            const categories = {};
+            ACHIEVEMENTS.forEach(a => {
+                if (!categories[a.category]) categories[a.category] = [];
+                categories[a.category].push(a);
+            });
+
+            container.innerHTML = Object.entries(categories).map(([cat, list]) => {
+                const color = CATEGORY_COLORS[cat] || 'neon-cyan';
+                const items = list.map(a => {
+                    const done = !!gameState.achievements[a.id];
+                    const rewardBadge = a.reward && done
+                        ? `<span class="inline-block mt-1 text-xs px-2 py-0.5 rounded-full bg-neon-green/20 text-neon-green border border-neon-green/30">${a.reward.label}</span>`
+                        : (a.reward ? `<span class="inline-block mt-1 text-xs px-2 py-0.5 rounded-full bg-white/5 text-white/20 border border-white/10">??? reward</span>` : '');
+                    return `
+                    <div class="flex items-start gap-3 p-3 rounded-xl ${done ? 'bg-white/5' : 'bg-black/20 achievement-card-locked'} transition-all">
+                        <div class="w-11 h-11 rounded-full flex items-center justify-center text-xl flex-shrink-0 mt-0.5 ${done ? `bg-${color}/20 border border-${color}/40` : 'bg-white/5 border border-white/10'}">
+                            ${done ? a.icon : '🔒'}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-orbitron text-sm font-bold ${done ? `text-${color}` : 'text-white/30'} truncate">${done ? a.name : '???'}</p>
+                            <p class="text-xs ${done ? 'text-white/60' : 'text-white/20'} mt-0.5">${done ? a.desc : 'Keep playing to unlock'}</p>
+                            <div>${rewardBadge}</div>
+                            ${done ? `<p class="text-xs text-white/20 mt-1">${new Date(gameState.achievements[a.id]).toLocaleDateString()}</p>` : ''}
+                        </div>
+                        ${done ? `<div class="text-neon-green flex-shrink-0 mt-0.5"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></div>` : ''}
+                    </div>`;
+                }).join('');
+
+                const doneCount = list.filter(a => !!gameState.achievements[a.id]).length;
+                return `
+                <div class="mb-5">
+                    <div class="flex items-center justify-between mb-2 px-1">
+                        <h3 class="font-orbitron text-xs text-white/40 tracking-widest">${CATEGORY_LABELS[cat]||cat.toUpperCase()}</h3>
+                        <span class="text-xs text-white/30">${doneCount}/${list.length}</span>
+                    </div>
+                    <div class="glass rounded-2xl p-3 space-y-2">${items}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function showAchievementToast(achievement) {
+            const toast = document.createElement('div');
+            toast.className = 'achievement-toast';
+            const rewardLine = achievement.reward
+                ? `<p class="text-xs text-neon-green mt-0.5">🎁 ${achievement.reward.label}</p>`
+                : '';
+            toast.innerHTML = `
+                <div class="glass-strong rounded-2xl p-4 border border-neon-cyan/40 flex items-center gap-3" style="box-shadow: 0 0 20px rgba(0,243,255,0.3)">
+                    <div class="w-12 h-12 rounded-full bg-neon-cyan/20 border border-neon-cyan/50 flex items-center justify-center text-2xl flex-shrink-0">${achievement.icon}</div>
+                    <div>
+                        <p class="text-xs text-neon-cyan font-orbitron tracking-widest mb-0.5">ACHIEVEMENT UNLOCKED</p>
+                        <p class="font-orbitron font-bold text-white">${achievement.name}</p>
+                        <p class="text-xs text-white/60">${achievement.desc}</p>
+                        ${rewardLine}
+                    </div>
+                </div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('toast-out');
+                setTimeout(() => toast.remove(), 400);
+            }, 3500);
+        }
+
+
+        // ==================== GAME DATA ====================
+        const producers = [
+            { id: 'pod', name: 'Neon Pod', baseCost: 15, baseProduction: 0.1, owned: 0 },
+            { id: 'flicker', name: 'Holo Flicker', baseCost: 100, baseProduction: 0.5, owned: 0 },
+            { id: 'drone', name: 'Quantum Drone', baseCost: 500, baseProduction: 2, owned: 0 },
+            { id: 'amplifier', name: 'Verse Amplifier', baseCost: 2500, baseProduction: 8, owned: 0 },
+            { id: 'nexus', name: 'Chill Nexus', baseCost: 12000, baseProduction: 30, owned: 0 },
+            { id: 'singularity', name: 'Neon Singularity', baseCost: 75000, baseProduction: 120, owned: 0 },
+            { id: 'diamond', name: 'Diamond Core', baseCost: 400000, baseProduction: 500, owned: 0 },
+            { id: 'eternal', name: 'Eternal Verse', baseCost: 2500000, baseProduction: 2500, owned: 0 },
+        ];
+        
+        const diamondUpgrades = [
+            { id: 'globalMult', name: 'Global Multiplier', description: '+10% to all production', baseCost: 1, level: 0, multiplier: 0.1 },
+            { id: 'clickMult', name: 'Click Power', description: '+1 base click power', baseCost: 2, level: 0, multiplier: 1 },
+            { id: 'startBonus', name: 'Starting Bonus', description: 'Start with +100 Chills after ascend', baseCost: 3, level: 0, multiplier: 100 },
+            { id: 'diamondBoost', name: 'Diamond Boost', description: '+10% Diamonds from ascend', baseCost: 5, level: 0, multiplier: 0.1 },
+        ];
+        
+        // ==================== GAME STATE ====================
+        let gameState = {
+            username: '',
+            email: '',
+            chills: 0,
+            totalChills: 0,
+            diamonds: 0,
+            clickPower: 1,
+            producers: JSON.parse(JSON.stringify(producers)),
+            diamondUpgrades: JSON.parse(JSON.stringify(diamondUpgrades)),
+            walletConnected: false,
+            settings: {
+                offlineProgress: true,
+                particles: true,
+                music: true,
+            },
+            lastSave: null,
+            nftCount: 0,
+            achievements: {},
+            totalClicks: 0,
+            totalAscensions: 0,
+            nameChanges: 0,
+            totalSpent: 0,
+            totalDiamonds: 0,
+            totalOfflineChills: 0,
+            achievementCpsMult: 1,
+            achievementClickMult: 1,
+            achievementClickBonus: 0,
+            producerMults: {},
+            sessionStart: Date.now(),
+            ownedNfts: [],
+            mintStartTime: null,
+            artefactsOwned: {},
+            stakeActive: null,
+            stakeHistory: [],
+            resetBonusGiven: false,
+        };
+        
+        // ==================== UTILITY FUNCTIONS ====================
+        function formatNumber(num) {
+            if (num < 10000) return Math.floor(num).toLocaleString();
+            const suffixes = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
+            const suffixIndex = Math.floor(Math.log10(num) / 3);
+            if (suffixIndex >= suffixes.length) return num.toExponential(2);
+            const scaled = num / Math.pow(1000, suffixIndex);
+            return scaled.toFixed(scaled >= 100 ? 0 : 1) + suffixes[suffixIndex];
+        }
+        
+        function getCost(baseCost, owned) {
+            return Math.floor(baseCost * Math.pow(1.15, owned));
+        }
+        
+        function getCPS() {
+            let cps = 0;
+            const globalMult = 1 + (gameState.diamondUpgrades.find(u => u.id === 'globalMult')?.level || 0) * 0.1;
+            const walletBonus = gameState.walletConnected ? 1.25 : 1;
+            const achMult = gameState.achievementCpsMult || 1;
+            const producerMults = gameState.producerMults || {};
+            
+            gameState.producers.forEach((p, i) => {
+                const pMult = producerMults['p' + i] || 1;
+                cps += p.owned * p.baseProduction * pMult;
+            });
+            
+            return cps * globalMult * walletBonus * achMult;
+        }
+        
+        function getClickPower() {
+            const clickBonus = gameState.diamondUpgrades.find(u => u.id === 'clickMult')?.level || 0;
+            const achFlat = gameState.achievementClickBonus || 0;
+            const achMult = gameState.achievementClickMult || 1;
+            return (gameState.clickPower + clickBonus + achFlat) * achMult;
+        }
+        
+        function calculateAscendDiamonds() {
+            if (gameState.totalChills < 10000) return 0;
+            const diamondBoost = 1 + (gameState.diamondUpgrades.find(u => u.id === 'diamondBoost')?.level || 0) * 0.1;
+            return Math.floor(Math.log10(gameState.totalChills / 10000) * 10 * diamondBoost);
+        }
+        
+        // ==================== PARTICLE SYSTEM ====================
+        function createParticle(x, y) {
+            if (!gameState.settings.particles) return;
+            
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.background = Math.random() > 0.5 ? '#00f3ff' : '#ff00aa';
+            
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 50 + Math.random() * 100;
+            particle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+            particle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+            
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 800);
+        }
+        
+        function createFloatingChill(x, y, amount) {
+            if (!gameState.settings.particles) return;
+            
+            const el = document.createElement('div');
+            el.className = 'floating-chill';
+            el.textContent = '+' + formatNumber(amount);
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000);
+        }
+        
+        // ==================== UI UPDATES ====================
+        function updateUI() {
+            document.getElementById('chillCount').textContent = formatNumber(gameState.chills);
+            document.getElementById('cpsDisplay').textContent = formatNumber(getCPS());
+            document.getElementById('diamondCount').textContent = formatNumber(gameState.diamonds);
+            document.getElementById('diamondCountBig').textContent = formatNumber(gameState.diamonds);
+            document.getElementById('clickPowerDisplay').textContent = formatNumber(getClickPower());
+            document.getElementById('displayUsername').textContent = gameState.username || 'Chiller';
+            document.getElementById('ascendDiamonds').textContent = formatNumber(calculateAscendDiamonds());
+            document.getElementById('modalDiamonds').textContent = formatNumber(calculateAscendDiamonds());
+            document.getElementById('savedEmail').textContent = gameState.email || 'Not set';
+            document.getElementById('lastSaved').textContent = gameState.lastSave ? new Date(gameState.lastSave).toLocaleTimeString() : 'Never';
+            
+            updateOwnedProducersList();
+            updateShop();
+            updateDiamondShop();
+            updateAchievements();
+            renderArtefactsShop();
+            // Web3 stats
+            const w3nft = document.getElementById('web3NftCount');
+            const w3art = document.getElementById('web3ArtefactCount');
+            const w3wal = document.getElementById('web3WalletStatus');
+            if (w3nft) w3nft.textContent = gameState.nftCount || 0;
+            if (w3art) w3art.textContent = Object.keys(gameState.artefactsOwned || {}).length;
+            if (w3wal) { w3wal.textContent = gameState.walletConnected ? 'Connected ✓' : 'Disconnected'; w3wal.className = gameState.walletConnected ? 'text-neon-green font-bold' : 'text-white/40 font-bold'; }
+        }
+        
+        function updateOwnedProducersList() {
+            const container = document.getElementById('ownedProducersList');
+            const owned = gameState.producers.filter(p => p.owned > 0);
+            
+            if (owned.length === 0) {
+                container.innerHTML = '<p class="text-white/40 text-center py-4">No producers yet. Visit the Production Shop!</p>';
+                return;
+            }
+            
+            container.innerHTML = owned.map(p => `
+                <div class="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+                    <div>
+                        <p class="font-bold text-white">${p.name}</p>
+                        <p class="text-xs text-white/50">${p.owned} owned</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-neon-cyan font-bold">+${formatNumber(p.owned * p.baseProduction)}/s</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateShop() {
+            const container = document.getElementById('shopGrid');
+            
+            container.innerHTML = gameState.producers.map((p, index) => {
+                const cost = getCost(p.baseCost, p.owned);
+                const canAfford = gameState.chills >= cost;
+                const cost10 = Array(10).fill(0).reduce((sum, _, i) => sum + getCost(p.baseCost, p.owned + i), 0);
+                const cost100 = Array(100).fill(0).reduce((sum, _, i) => sum + getCost(p.baseCost, p.owned + i), 0);
+                const canAfford10 = gameState.chills >= cost10;
+                const canAfford100 = gameState.chills >= cost100;
+                
+                return `
+                    <div class="producer-card glass rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <h4 class="font-orbitron font-bold text-white">${p.name}</h4>
+                                <p class="text-xs text-white/50">+${p.baseProduction} Chills/s each</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-orbitron font-bold ${canAfford ? 'text-neon-cyan' : 'text-white/30'}">${p.owned}</p>
+                                <p class="text-xs text-white/40">owned</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="buyProducer(${index}, 1)" 
+                                class="flex-1 py-2 rounded-lg font-bold text-sm transition-all ${canAfford ? 'bg-neon-cyan/20 border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan/30' : 'bg-white/5 border border-white/10 text-white/30 cursor-not-allowed'}">
+                                Buy 1<br><span class="text-xs">${formatNumber(cost)}</span>
+                            </button>
+                            <button onclick="buyProducer(${index}, 10)" 
+                                class="flex-1 py-2 rounded-lg font-bold text-sm transition-all ${canAfford10 ? 'bg-neon-purple/20 border border-neon-purple/50 text-neon-purple hover:bg-neon-purple/30' : 'bg-white/5 border border-white/10 text-white/30 cursor-not-allowed'}">
+                                Buy 10<br><span class="text-xs">${formatNumber(cost10)}</span>
+                            </button>
+                            <button onclick="buyProducer(${index}, 100)" 
+                                class="flex-1 py-2 rounded-lg font-bold text-sm transition-all ${canAfford100 ? 'bg-neon-magenta/20 border border-neon-magenta/50 text-neon-magenta hover:bg-neon-magenta/30' : 'bg-white/5 border border-white/10 text-white/30 cursor-not-allowed'}">
+                                Buy 100<br><span class="text-xs">${formatNumber(cost100)}</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function updateDiamondShop() {
+            const container = document.getElementById('diamondShop');
+            
+            container.innerHTML = gameState.diamondUpgrades.map((u, index) => {
+                const cost = u.baseCost + u.level;
+                const canAfford = gameState.diamonds >= cost;
+                
+                return `
+                    <div class="producer-card glass rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <h4 class="font-orbitron font-bold text-white">${u.name}</h4>
+                                <p class="text-xs text-white/50">${u.description}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xl font-orbitron font-bold text-neon-magenta">Lv.${u.level}</p>
+                            </div>
+                        </div>
+                        <button onclick="buyDiamondUpgrade(${index})" 
+                            class="w-full py-2 rounded-lg font-bold text-sm transition-all ${canAfford ? 'bg-neon-magenta/20 border border-neon-magenta/50 text-neon-magenta hover:bg-neon-magenta/30' : 'bg-white/5 border border-white/10 text-white/30 cursor-not-allowed'}">
+                            Upgrade • ${formatNumber(cost)} Diamonds
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // ==================== GAME ACTIONS ====================
+        function buyProducer(index, amount) {
+            const p = gameState.producers[index];
+            let totalCost = 0;
+            
+            for (let i = 0; i < amount; i++) {
+                totalCost += getCost(p.baseCost, p.owned + i);
+            }
+            
+            if (gameState.chills >= totalCost) {
+                gameState.chills -= totalCost;
+                gameState.totalSpent = (gameState.totalSpent||0) + totalCost;
+                p.owned += amount;
+                saveGame();
+                updateUI();
+            }
+        }
+        
+        function buyDiamondUpgrade(index) {
+            const u = gameState.diamondUpgrades[index];
+            const cost = u.baseCost + u.level;
+            
+            if (gameState.diamonds >= cost) {
+                gameState.diamonds -= cost;
+                u.level++;
+                saveGame();
+                updateUI();
+            }
+        }
+        
+        function clickChillCore(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const power = getClickPower();
+            gameState.chills += power;
+            gameState.totalChills += power;
+            gameState.totalClicks = (gameState.totalClicks || 0) + 1;
+
+            // Instant counter update only — skip expensive shop/achievement re-renders
+            document.getElementById('chillCount').textContent = formatNumber(gameState.chills);
+            document.getElementById('cpsDisplay').textContent = formatNumber(getCPS());
+            document.getElementById('clickPowerDisplay').textContent = formatNumber(getClickPower());
+
+            // Particle + float text
+            const btn = document.getElementById('chillCore');
+            const rect = btn.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const tx = e.changedTouches ? e.changedTouches[0].clientX : (e.clientX || cx);
+            const ty = e.changedTouches ? e.changedTouches[0].clientY : (e.clientY || cy);
+
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => createParticle(cx, cy), i * 20);
+            }
+            createFloatingChill(tx, ty, power);
+        }
+        
+        function ascend() {
+            const diamonds = calculateAscendDiamonds();
+            if (diamonds <= 0) return;
+            
+            gameState.diamonds += diamonds;
+            gameState.totalDiamonds = (gameState.totalDiamonds||0) + diamonds;
+            gameState.totalAscensions = (gameState.totalAscensions || 0) + 1;
+            gameState.chills = gameState.diamondUpgrades.find(u => u.id === 'startBonus')?.level * 100 || 0;
+            gameState.totalChills = gameState.chills;
+            gameState.clickPower = 1;
+            gameState.producers = JSON.parse(JSON.stringify(producers));
+            gameState.walletConnected = false;
+            
+            saveGame();
+            updateUI();
+            updateWalletUI();
+            
+            document.getElementById('ascendModal').classList.add('hidden');
+        }
+        
+        function resetGame() {
+            // Give 20 diamonds one-time bonus on this update if not already given
+            const bonusKey = 'idleVerseV11ResetBonus';
+            localStorage.removeItem('idleVerseSave');
+            localStorage.removeItem(bonusKey); // clear so next load awards it
+            // Reset state fully in-memory
+            gameState = {
+                username: '', email: '', chills: 0, totalChills: 0, diamonds: 20,
+                totalDiamonds: 20, clickPower: 1, producers: JSON.parse(JSON.stringify(producers)),
+                diamondUpgrades: JSON.parse(JSON.stringify(diamondUpgrades)),
+                walletConnected: false, settings: { offlineProgress: true, particles: true, music: gameState.settings?.music ?? true },
+                lastSave: null, nftCount: 0, ownedNfts: [], mintStartTime: null,
+                achievements: {}, totalClicks: 0, totalAscensions: 0, nameChanges: 0,
+                totalSpent: 0, totalOfflineChills: 0, achievementCpsMult: 1,
+                achievementClickMult: 1, achievementClickBonus: 0, producerMults: {},
+                sessionStart: Date.now(), stakeActive: null, stakeHistory: [],
+                artefactsOwned: {}, resetBonusGiven: true,
+            };
+            saveGame();
+            // Show reset modal hidden first
+            document.getElementById('resetModal').classList.add('hidden');
+            // Show a brief confirmation then refresh UI
+            document.getElementById('loadingScreen').classList.remove('hidden');
+            document.getElementById('mainGame').classList.add('hidden');
+            // Keep music state
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+                document.getElementById('mainGame').classList.remove('hidden');
+                updateUI();
+                updateWalletUI();
+                renderNFTCollection();
+                renderArtefactsVault();
+                renderArtefactsShop();
+                renderStakeHistory();
+            }, 500);
+        }
+        
+        // ==================== WALLET ====================
+        function updateWalletUI() {
+            if (gameState.walletConnected) {
+                document.getElementById('walletDisconnected').classList.add('hidden');
+                document.getElementById('walletConnected').classList.remove('hidden');
+                document.getElementById('walletAddress').textContent = '0x7a9f...3k9d';
+            } else {
+                document.getElementById('walletDisconnected').classList.remove('hidden');
+                document.getElementById('walletConnected').classList.add('hidden');
+            }
+            updateUI();
+        }
+        
+        function connectWallet() {
+            gameState.walletConnected = true;
+            saveGame();
+            updateWalletUI();
+        }
+        
+        // ==================== NFT SYSTEM ====================
+        const NFT_IMAGES = [
+            { file: 'NFTS/common 1.JPG',   name: 'Chill Common #1',    rarity: 'common' },
+            { file: 'NFTS/common 2.jpg',    name: 'Chill Common #2',    rarity: 'common' },
+            { file: 'NFTS/common 3.jpg',    name: 'Chill Common #3',    rarity: 'common' },
+            { file: 'NFTS/common 4.jpg',    name: 'Chill Common #4',    rarity: 'common' },
+            { file: 'NFTS/common 5.jpg',    name: 'Chill Common #5',    rarity: 'common' },
+            { file: 'NFTS/common 6.jpg',    name: 'Chill Common #6',    rarity: 'common' },
+            { file: 'NFTS/common 7.jpg',    name: 'Chill Common #7',    rarity: 'common' },
+            { file: 'NFTS/common 9.jpg',    name: 'Chill Common #9',    rarity: 'common' },
+            { file: 'NFTS/common 10.jpg',   name: 'Chill Common #10',   rarity: 'common' },
+            { file: 'NFTS/common 11.jpg',   name: 'Chill Common #11',   rarity: 'common' },
+            { file: 'NFTS/common 12.jpg',   name: 'Chill Common #12',   rarity: 'common' },
+            { file: 'NFTS/common 13.jpg',   name: 'Chill Common #13',   rarity: 'common' },
+            { file: 'NFTS/common.jpg',      name: 'Chill Common OG',    rarity: 'common' },
+            { file: 'NFTS/Emblem Epic.jpg',  name: 'Epic Emblem',        rarity: 'rare' },
+            { file: 'NFTS/Emblem Rare.jpg',  name: 'Rare Emblem',        rarity: 'rare' },
+            { file: 'NFTS/Presido (Legend).jpg', name: 'Presido Legend', rarity: 'legend' },
+            { file: 'NFTS/Victor-vk(Legend).jpg', name: 'Victor-vk Legend', rarity: 'legend' },
+        ];
+        const MINT_DURATION = 5.5 * 60 * 60 * 1000; // 5h 30m in ms
+        const RARITY_WEIGHTS = { common: 70, rare: 20, legend: 10 }; // %
+
+        function pickRandomNFT() {
+            const roll = Math.random() * 100;
+            let pool;
+            if (roll < RARITY_WEIGHTS.legend) pool = NFT_IMAGES.filter(n => n.rarity === 'legend');
+            else if (roll < RARITY_WEIGHTS.legend + RARITY_WEIGHTS.rare) pool = NFT_IMAGES.filter(n => n.rarity === 'rare');
+            else pool = NFT_IMAGES.filter(n => n.rarity === 'common');
+            return pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        function startMint() {
+            if (gameState.mintStartTime) return;
+            if (gameState.diamonds < 10) { alert('Need 10 Diamonds to mint!'); return; }
+            if (gameState.chills < 10000) { alert('Need 10,000 Chills to mint!'); return; }
+            gameState.diamonds -= 10;
+            gameState.chills -= 10000;
+            gameState.mintStartTime = Date.now();
+            saveGame();
+            updateUI();
+            updateMintUI();
+        }
+
+        function cancelMint() {
+            gameState.mintStartTime = null;
+            saveGame();
+            updateMintUI();
+        }
+
+        function claimNFT() {
+            const nft = pickRandomNFT();
+            if (!gameState.ownedNfts) gameState.ownedNfts = [];
+            gameState.ownedNfts.push({ ...nft, mintedAt: Date.now(), id: Date.now() });
+            gameState.nftCount = (gameState.nftCount || 0) + 1;
+            gameState.mintStartTime = null;
+            saveGame();
+            updateUI();
+            updateMintUI();
+            renderNFTCollection();
+            // Show claim toast
+            showNFTClaimToast(nft);
+        }
+
+        function showNFTClaimToast(nft) {
+            const rarityColor = nft.rarity === 'legend' ? '#ffcc00' : nft.rarity === 'rare' ? '#ff00aa' : '#00f3ff';
+            const toast = document.createElement('div');
+            toast.className = 'achievement-toast';
+            toast.innerHTML = `
+                <div class="glass-strong rounded-2xl p-4 border flex items-center gap-3" style="border-color:${rarityColor}40;box-shadow:0 0 20px ${rarityColor}33">
+                    <img src="${nft.file}" class="w-12 h-12 rounded-xl object-cover flex-shrink-0" onerror="this.style.display='none'">
+                    <div>
+                        <p class="text-xs font-orbitron tracking-widest mb-0.5" style="color:${rarityColor}">NFT CLAIMED • ${nft.rarity.toUpperCase()}</p>
+                        <p class="font-orbitron font-bold text-white">${nft.name}</p>
+                    </div>
+                </div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.classList.add('toast-out'); setTimeout(() => toast.remove(), 400); }, 4000);
+        }
+
+        function updateMintUI() {
+            const idle = document.getElementById('nftMintIdle');
+            const active = document.getElementById('nftMintActive');
+            const ready = document.getElementById('nftMintReady');
+            if (!idle) return;
+            if (!gameState.mintStartTime) {
+                idle.classList.remove('hidden'); active.classList.add('hidden'); ready.classList.add('hidden');
+            } else {
+                const elapsed = Date.now() - gameState.mintStartTime;
+                const pct = Math.min(100, (elapsed / MINT_DURATION) * 100);
+                if (elapsed >= MINT_DURATION) {
+                    idle.classList.add('hidden'); active.classList.add('hidden'); ready.classList.remove('hidden');
+                } else {
+                    idle.classList.add('hidden'); active.classList.remove('hidden'); ready.classList.add('hidden');
+                    const remaining = MINT_DURATION - elapsed;
+                    const h = Math.floor(remaining / 3600000);
+                    const m = Math.floor((remaining % 3600000) / 60000);
+                    const s = Math.floor((remaining % 60000) / 1000);
+                    document.getElementById('mintProgressBar').style.width = pct + '%';
+                    document.getElementById('mintTimeLeft').textContent = `${h}h ${m}m ${s}s remaining`;
+                }
+            }
+        }
+
+        function renderNFTCollection() {
+            const container = document.getElementById('nftCollection');
+            if (!container) return;
+            const nfts = gameState.ownedNfts || [];
+            if (!nfts.length) {
+                container.innerHTML = '<div class="col-span-2 text-center text-white/30 py-6 text-sm">No NFTs yet. Start a mint!</div>';
+                return;
+            }
+            const rarityBorder = { legend: 'border-yellow-400/60', rare: 'border-neon-magenta/60', common: 'border-neon-cyan/30' };
+            const rarityLabel = { legend: 'text-yellow-400', rare: 'text-neon-magenta', common: 'text-neon-cyan' };
+            container.innerHTML = nfts.map(nft => `
+                <div class="glass rounded-xl overflow-hidden border ${rarityBorder[nft.rarity] || 'border-white/10'}">
+                    <img src="${nft.file}" class="w-full h-28 object-cover" onerror="this.style.background='#111';this.style.minHeight='7rem'">
+                    <div class="p-2">
+                        <p class="font-orbitron text-xs font-bold text-white truncate">${nft.name}</p>
+                        <p class="text-xs ${rarityLabel[nft.rarity] || 'text-white/40'} uppercase tracking-wider">${nft.rarity}</p>
+                    </div>
+                </div>`).join('');
+        }
+
+        // ==================== ARTEFACTS SYSTEM ====================
+        const ARTEFACTS = [
+            // Chill-bought (12) — lowest starts at 3M
+            { id: 'art_crystal',    name: 'Chill Crystal',      icon: '🔷', cost: 3000000,   currency: 'chills',   desc: 'A frozen shard of pure chill energy' },
+            { id: 'art_scroll',     name: 'Verse Scroll',       icon: '📜', cost: 8000000,   currency: 'chills',   desc: 'Ancient texts of the Chill Verse' },
+            { id: 'art_compass',    name: 'Neon Compass',       icon: '🧭', cost: 20000000,  currency: 'chills',   desc: 'Points toward infinite chills' },
+            { id: 'art_orb',        name: 'Plasma Orb',         icon: '🔮', cost: 60000000,  currency: 'chills',   desc: 'A swirling ball of chill plasma' },
+            { id: 'art_mask',       name: 'Chiller Mask',       icon: '🎭', cost: 150000000, currency: 'chills',   desc: 'Worn by the OG chill legends' },
+            { id: 'art_sword',      name: 'Neon Blade',         icon: '⚔️', cost: 400000000, currency: 'chills',   desc: 'Forged in the neon forge' },
+            { id: 'art_crown',      name: 'Verse Crown',        icon: '👑', cost: 1000000000,currency: 'chills',   desc: 'Only for the true Chill Lords' },
+            { id: 'art_ring',       name: 'Diamond Ring',       icon: '💍', cost: 3000000000,currency: 'chills',   desc: 'A ring encrusted with chill diamonds' },
+            { id: 'art_lantern',    name: 'Star Lantern',       icon: '🏮', cost: 8000000000,currency: 'chills',   desc: 'Lights the path through the verse' },
+            { id: 'art_map',        name: 'Verse Map',          icon: '🗺️', cost: 25000000000,currency:'chills',   desc: 'Maps every corner of the Idle Verse' },
+            { id: 'art_banner',     name: 'Chill Banner',       icon: '🚩', cost: 75000000000,currency:'chills',   desc: 'Plant your flag in the verse' },
+            { id: 'art_tome',       name: 'Ancient Tome',       icon: '📕', cost: 200000000000,currency:'chills',  desc: 'The complete history of the Chill Verse' },
+            // Diamond-bought (8)
+            { id: 'art_gem',        name: 'Prism Gem',          icon: '💎', cost: 35,      currency: 'diamonds', desc: 'Refracts all light into chill frequencies' },
+            { id: 'art_gauntlet',   name: 'Chill Gauntlet',     icon: '🥊', cost: 60,      currency: 'diamonds', desc: 'Power of a thousand chills in one fist' },
+            { id: 'art_amulet',     name: 'Verse Amulet',       icon: '🧿', cost: 100,     currency: 'diamonds', desc: 'Protects against unchill forces' },
+            { id: 'art_codex',      name: 'Diamond Codex',      icon: '📒', cost: 150,     currency: 'diamonds', desc: 'Secrets of the diamond ascension' },
+            { id: 'art_hourglass',  name: 'Neon Hourglass',     icon: '⏳', cost: 220,     currency: 'diamonds', desc: 'Time flows differently in the verse' },
+            { id: 'art_wings',      name: 'Verse Wings',        icon: '🦋', cost: 350,     currency: 'diamonds', desc: 'Ascend beyond the known verse' },
+            { id: 'art_trident',    name: 'Chill Trident',      icon: '🔱', cost: 500,     currency: 'diamonds', desc: 'Commands the three realms of chill' },
+            { id: 'art_throne',     name: 'Diamond Throne',     icon: '🏛️', cost: 800,     currency: 'diamonds', desc: 'Sit atop the entire chill empire' },
+        ];
+
+        function buyArtefact(id) {
+            const art = ARTEFACTS.find(a => a.id === id);
+            if (!art) return;
+            if (!gameState.artefactsOwned) gameState.artefactsOwned = {};
+            if (gameState.artefactsOwned[id]) { alert('You already own this artefact!'); return; }
+            if (art.currency === 'chills') {
+                if (gameState.chills < art.cost) { alert('Not enough Chills!'); return; }
+                gameState.chills -= art.cost;
+            } else {
+                if (gameState.diamonds < art.cost) { alert('Not enough Diamonds!'); return; }
+                gameState.diamonds -= art.cost;
+            }
+            gameState.artefactsOwned[id] = Date.now();
+            saveGame();
+            updateUI();
+            renderArtefactsShop();
+            renderArtefactsVault();
+        }
+
+        function renderArtefactsShop() {
+            const container = document.getElementById('artefactsShopGrid');
+            if (!container) return;
+            if (!gameState.artefactsOwned) gameState.artefactsOwned = {};
+            container.innerHTML = ARTEFACTS.map(art => {
+                const owned = !!gameState.artefactsOwned[art.id];
+                const isChills = art.currency === 'chills';
+                const canAfford = isChills ? gameState.chills >= art.cost : gameState.diamonds >= art.cost;
+                return `
+                <div class="glass rounded-xl p-3 flex items-center gap-3 ${owned ? 'opacity-50' : ''}">
+                    <span class="text-2xl flex-shrink-0">${art.icon}</span>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-orbitron text-sm font-bold text-white">${art.name}</p>
+                        <p class="text-xs text-white/40">${art.desc}</p>
+                    </div>
+                    <button onclick="buyArtefact('${art.id}')" ${owned ? 'disabled' : ''}
+                        class="flex-shrink-0 px-3 py-2 rounded-lg text-xs font-orbitron font-bold transition-all ${owned ? 'bg-neon-green/20 text-neon-green border border-neon-green/30 cursor-default' : canAfford ? (isChills ? 'bg-neon-cyan/20 border border-neon-cyan/50 text-neon-cyan hover:bg-neon-cyan/30' : 'bg-neon-magenta/20 border border-neon-magenta/50 text-neon-magenta hover:bg-neon-magenta/30') : 'bg-white/5 border border-white/10 text-white/30 cursor-not-allowed'}">
+                        ${owned ? '✓ Owned' : formatNumber(art.cost) + (isChills ? ' C' : ' 💎')}
+                    </button>
+                </div>`;
+            }).join('');
+        }
+
+        function renderArtefactsVault() {
+            const container = document.getElementById('artefactsVault');
+            if (!container) return;
+            if (!gameState.artefactsOwned) gameState.artefactsOwned = {};
+            const owned = ARTEFACTS.filter(a => gameState.artefactsOwned[a.id]);
+            if (!owned.length) {
+                container.innerHTML = '<div class="col-span-2 text-center text-white/30 py-4 text-sm">No artefacts yet. Visit the Shop!</div>';
+                return;
+            }
+            container.innerHTML = owned.map(art => `
+                <div class="glass rounded-xl p-3 text-center border border-white/10">
+                    <div class="text-3xl mb-1">${art.icon}</div>
+                    <p class="font-orbitron text-xs font-bold text-white">${art.name}</p>
+                    <p class="text-xs text-neon-cyan capitalize">${art.currency === 'diamonds' ? '💎 Rare' : '✨ Common'}</p>
+                </div>`).join('');
+        }
+
+        // ==================== STAKING SYSTEM ====================
+        const STAKE_DURATION = 60 * 60 * 1000; // 1 hour
+        let stakeChartData = Array(30).fill(100).map((v, i) => v + Math.sin(i * 0.5) * 20 + Math.random() * 10);
+
+        function initStakeChart() {
+            const canvas = document.getElementById('stakeChart');
+            if (!canvas) return;
+            drawStakeChart(canvas);
+        }
+
+        function drawStakeChart(canvas) {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.offsetWidth || 300;
+            canvas.width = w;
+            canvas.height = 100;
+            ctx.clearRect(0, 0, w, 100);
+            const max = Math.max(...stakeChartData);
+            const min = Math.min(...stakeChartData);
+            const range = max - min || 1;
+            const pts = stakeChartData.map((v, i) => ({ x: (i / (stakeChartData.length - 1)) * w, y: 90 - ((v - min) / range) * 80 }));
+            // Gradient fill
+            const grad = ctx.createLinearGradient(0, 0, 0, 100);
+            grad.addColorStop(0, 'rgba(0,243,255,0.3)');
+            grad.addColorStop(1, 'rgba(0,243,255,0)');
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            pts.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.lineTo(w, 100); ctx.lineTo(0, 100); ctx.closePath();
+            ctx.fillStyle = grad;
+            ctx.fill();
+            // Line
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            pts.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.strokeStyle = '#00f3ff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function updateStakeChart() {
+            const last = stakeChartData[stakeChartData.length - 1];
+            const change = (Math.random() - 0.48) * 8;
+            stakeChartData.push(Math.max(10, last + change));
+            if (stakeChartData.length > 40) stakeChartData.shift();
+            const canvas = document.getElementById('stakeChart');
+            if (canvas) drawStakeChart(canvas);
+            const trend = document.getElementById('stakeChartTrend');
+            if (trend) {
+                const up = change >= 0;
+                trend.textContent = up ? '▲ BULLISH' : '▼ BEARISH';
+                trend.className = 'text-xs font-bold ' + (up ? 'text-neon-green' : 'text-red-400');
+            }
+        }
+
+        function placeStake(direction) {
+            if (gameState.stakeActive) { alert('A stake is already in progress!'); return; }
+            const input = document.getElementById('stakeAmountInput');
+            const amount = parseFloat(input?.value || 0);
+            if (amount < 100) { alert('Minimum stake is 100 Chills!'); return; }
+            if (gameState.chills < amount) { alert('Not enough Chills!'); return; }
+            gameState.chills -= amount;
+            gameState.stakeActive = { amount, direction, startTime: Date.now(), startPrice: stakeChartData[stakeChartData.length - 1] };
+            saveGame();
+            updateUI();
+            updateStakeUI();
+        }
+
+        function updateStakeUI() {
+            const idle = document.getElementById('stakeIdlePanel');
+            const active = document.getElementById('stakeActivePanel');
+            if (!idle || !active) return;
+            const bal = document.getElementById('stakeBalanceDisplay');
+            if (bal) bal.textContent = formatNumber(gameState.chills);
+            if (!gameState.stakeActive) {
+                idle.classList.remove('hidden'); active.classList.add('hidden');
+            } else {
+                idle.classList.add('hidden'); active.classList.remove('hidden');
+                const s = gameState.stakeActive;
+                const elapsed = Date.now() - s.startTime;
+                const pct = Math.min(100, (elapsed / STAKE_DURATION) * 100);
+                const remaining = Math.max(0, STAKE_DURATION - elapsed);
+                const m = Math.floor(remaining / 60000);
+                const sec = Math.floor((remaining % 60000) / 1000);
+                const bar = document.getElementById('stakeProgressBar');
+                const time = document.getElementById('stakeTimeLeft');
+                const pos = document.getElementById('stakePositionDisplay');
+                const amt = document.getElementById('stakeAmountDisplay');
+                if (bar) bar.style.width = pct + '%';
+                if (time) time.textContent = elapsed >= STAKE_DURATION ? 'Settling...' : `${m}m ${sec}s remaining`;
+                if (amt) amt.textContent = formatNumber(s.amount) + ' Chills';
+                if (pos) { pos.textContent = s.direction === 'buy' ? '⬆ BUY' : '⬇ SELL'; pos.className = 'font-bold ' + (s.direction === 'buy' ? 'text-neon-green' : 'text-red-400'); }
+                // Settle when done
+                if (elapsed >= STAKE_DURATION) settleStake();
+            }
+        }
+
+        function settleStake() {
+            if (!gameState.stakeActive) return;
+            const s = gameState.stakeActive;
+            const endPrice = stakeChartData[stakeChartData.length - 1];
+            const priceUp = endPrice >= s.startPrice;
+            const won = (s.direction === 'buy' && priceUp) || (s.direction === 'sell' && !priceUp);
+            const multiplier = 0.8 + Math.random() * 0.6; // 0.8x – 1.4x
+            const payout = won ? Math.floor(s.amount * (1 + multiplier * 0.5)) : 0;
+            gameState.chills += payout;
+            gameState.totalChills += payout;
+            if (!gameState.stakeHistory) gameState.stakeHistory = [];
+            gameState.stakeHistory.unshift({ amount: s.amount, direction: s.direction, won, payout, time: Date.now() });
+            if (gameState.stakeHistory.length > 10) gameState.stakeHistory.pop();
+            gameState.stakeActive = null;
+            saveGame();
+            updateUI();
+            updateStakeUI();
+            renderStakeHistory();
+            // Toast
+            const toast = document.createElement('div');
+            toast.className = 'achievement-toast';
+            toast.innerHTML = `<div class="glass-strong rounded-2xl p-4 border ${won ? 'border-neon-green/40' : 'border-red-500/40'} text-center" style="box-shadow:0 0 20px ${won ? 'rgba(0,255,136,0.3)' : 'rgba(255,80,80,0.3)'}">
+                <p class="font-orbitron font-bold ${won ? 'text-neon-green' : 'text-red-400'}">${won ? '📈 STAKE WON!' : '📉 STAKE LOST'}</p>
+                <p class="text-white/70 text-sm mt-1">${won ? '+' + formatNumber(payout) + ' Chills' : 'Better luck next time!'}</p></div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.classList.add('toast-out'); setTimeout(() => toast.remove(), 400); }, 4000);
+        }
+
+        function renderStakeHistory() {
+            const container = document.getElementById('stakeHistory');
+            if (!container) return;
+            const hist = gameState.stakeHistory || [];
+            if (!hist.length) { container.innerHTML = '<p class="text-white/30 text-sm text-center py-2">No stakes yet</p>'; return; }
+            container.innerHTML = hist.map(h => `
+                <div class="flex items-center justify-between py-2 border-b border-white/5 text-xs">
+                    <span class="${h.won ? 'text-neon-green' : 'text-red-400'}">${h.direction === 'buy' ? '⬆' : '⬇'} ${h.direction.toUpperCase()}</span>
+                    <span class="text-white/40">${formatNumber(h.amount)} staked</span>
+                    <span class="${h.won ? 'text-neon-green font-bold' : 'text-red-400'}">${h.won ? '+' + formatNumber(h.payout) : 'Lost'}</span>
+                </div>`).join('');
+        }
+        
+        // ==================== SAVE/LOAD ====================
+        function saveGame() {
+            gameState.lastSave = Date.now();
+            localStorage.setItem('idleVerseSave', JSON.stringify(gameState));
+        }
+        
+        function loadGame() {
+            const saved = localStorage.getItem('idleVerseSave');
+            if (saved) {
+                const loaded = JSON.parse(saved);
+                gameState = { ...gameState, ...loaded };
+                
+                // Ensure new fields exist for old saves
+                if (!gameState.settings) gameState.settings = {};
+                if (gameState.settings.music === undefined) gameState.settings.music = true;
+                if (!gameState.totalClicks) gameState.totalClicks = 0;
+                if (!gameState.totalAscensions) gameState.totalAscensions = 0;
+                if (!gameState.nameChanges) gameState.nameChanges = 0;
+                if (!gameState.totalSpent) gameState.totalSpent = 0;
+                if (!gameState.totalDiamonds) gameState.totalDiamonds = 0;
+                if (!gameState.totalOfflineChills) gameState.totalOfflineChills = 0;
+                if (!gameState.achievementCpsMult) gameState.achievementCpsMult = 1;
+                if (!gameState.achievementClickMult) gameState.achievementClickMult = 1;
+                if (!gameState.achievementClickBonus) gameState.achievementClickBonus = 0;
+                if (!gameState.producerMults) gameState.producerMults = {};
+                if (!gameState.sessionStart) gameState.sessionStart = Date.now();
+                if (!gameState.ownedNfts) gameState.ownedNfts = [];
+                if (!gameState.artefactsOwned) gameState.artefactsOwned = {};
+                if (!gameState.stakeHistory) gameState.stakeHistory = [];
+                // One-time 20 diamond bonus for v1.1 update
+                if (!gameState.resetBonusGiven) {
+                    gameState.diamonds += 20;
+                    gameState.totalDiamonds += 20;
+                    gameState.resetBonusGiven = true;
+                }
+                
+                // Ensure producers array is complete
+                gameState.producers = gameState.producers.map((p, i) => ({
+                    ...producers[i],
+                    ...p,
+                }));
+                
+                // Ensure diamond upgrades are complete
+                gameState.diamondUpgrades = gameState.diamondUpgrades.map((u, i) => ({
+                    ...diamondUpgrades[i],
+                    ...u,
+                }));
+                
+                // Apply offline progress
+                if (gameState.settings.offlineProgress && gameState.lastSave) {
+                    const offlineTime = (Date.now() - gameState.lastSave) / 1000;
+                    if (offlineTime > 5) {
+                        const offlineCPS = getCPS();
+                        const offlineChills = offlineCPS * offlineTime;
+                        if (offlineChills > 0) {
+                            gameState.chills += offlineChills;
+                            gameState.totalChills += offlineChills;
+                            gameState.totalOfflineChills = (gameState.totalOfflineChills||0) + offlineChills;
+                            document.getElementById('offlineChills').textContent = formatNumber(offlineChills);
+                            document.getElementById('offlineProgress').classList.remove('hidden');
+                        }
+                    }
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+        // ==================== STARS BACKGROUND ====================
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.opacity = Math.random() * 0.7 + 0.3;
+                container.appendChild(star);
+            }
+        }
+        
+        // ==================== TAB NAVIGATION ====================
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab' + tabName).classList.remove('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('opacity-60');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('tab-active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.remove('opacity-60');
+        }
+        
+        // ==================== EVENT LISTENERS ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            
+            const hasSave = loadGame();
+            
+            if (hasSave && gameState.username) {
+                document.getElementById('loadingScreen').classList.add('hidden');
+                document.getElementById('mainGame').classList.remove('hidden');
+                updateUI();
+                updateWalletUI();
+            }
+            
+            // Enter button
+            document.getElementById('enterBtn').addEventListener('click', () => {
+                const username = document.getElementById('usernameInput').value.trim();
+                const email = document.getElementById('emailInput').value.trim();
+                
+                if (!username) {
+                    alert('Please enter your Chill Handle!');
+                    return;
+                }
+                
+                gameState.username = username;
+                gameState.email = email;
+                saveGame();
+                
+                document.getElementById('loadingScreen').classList.add('hidden');
+                document.getElementById('mainGame').classList.remove('hidden');
+                updateUI();
+            });
+            
+            // Tab buttons (all .tab-btn elements)
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchTab(btn.dataset.tab);
+                    // Close side menu when a nav item is clicked
+                    closeSideMenu();
+                });
+            });
+
+            // ===== SIDE MENU =====
+            function openSideMenu() {
+                document.getElementById('sideMenu').classList.remove('-translate-x-full');
+                document.getElementById('menuOverlay').classList.remove('hidden');
+            }
+            function closeSideMenu() {
+                document.getElementById('sideMenu').classList.add('-translate-x-full');
+                document.getElementById('menuOverlay').classList.add('hidden');
+            }
+            document.getElementById('menuToggleBtn').addEventListener('click', () => {
+                const isOpen = !document.getElementById('sideMenu').classList.contains('-translate-x-full');
+                isOpen ? closeSideMenu() : openSideMenu();
+            });
+            document.getElementById('menuOverlay').addEventListener('click', closeSideMenu);
+
+            // ===== SETTINGS DROPDOWN =====
+            document.getElementById('settingsToggleBtn').addEventListener('click', () => {
+                document.getElementById('settingsDropdown').classList.toggle('hidden');
+            });
+            
+            // Chill Core — fires instantly on touchstart (mobile) or click (desktop)
+            const coreBtn = document.getElementById('chillCore');
+            let coreTouched = false;
+            coreBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                coreTouched = true;
+                clickChillCore(e);
+            }, { passive: false });
+            coreBtn.addEventListener('click', (e) => {
+                // On desktop (no touch), fire on click. On mobile, touchstart already handled it.
+                if (!coreTouched) clickChillCore(e);
+                coreTouched = false;
+            });
+            
+            // Ascend
+            document.getElementById('ascendBtn').addEventListener('click', () => {
+                if (calculateAscendDiamonds() <= 0) {
+                    alert('You need at least 10,000 total Chills to ascend!');
+                    return;
+                }
+                document.getElementById('ascendModal').classList.remove('hidden');
+            });
+            
+            document.getElementById('cancelAscend').addEventListener('click', () => {
+                document.getElementById('ascendModal').classList.add('hidden');
+            });
+            
+            document.getElementById('confirmAscend').addEventListener('click', ascend);
+            
+            // Reset game
+            document.getElementById('resetGameBtn').addEventListener('click', () => {
+                document.getElementById('resetModal').classList.remove('hidden');
+            });
+            
+            document.getElementById('cancelReset').addEventListener('click', () => {
+                document.getElementById('resetModal').classList.add('hidden');
+            });
+            
+            document.getElementById('confirmReset').addEventListener('click', resetGame);
+            
+            // Wallet
+            document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+            
+            // NFT minting (old modal - keep for compatibility, but new system is in NFT tab)
+            // New NFT mint buttons
+            const startMintBtn = document.getElementById('startMintBtn');
+            const cancelMintBtn = document.getElementById('cancelMintBtn');
+            const claimNftBtn = document.getElementById('claimNftBtn');
+            if (startMintBtn) startMintBtn.addEventListener('click', startMint);
+            if (cancelMintBtn) cancelMintBtn.addEventListener('click', cancelMint);
+            if (claimNftBtn) claimNftBtn.addEventListener('click', claimNFT);
+
+            // Stake buttons
+            const stakeBuyBtn = document.getElementById('stakeBuyBtn');
+            const stakeSellBtn = document.getElementById('stakeSellBtn');
+            if (stakeBuyBtn) stakeBuyBtn.addEventListener('click', () => placeStake('buy'));
+            if (stakeSellBtn) stakeSellBtn.addEventListener('click', () => placeStake('sell'));
+
+            // Render NFT and artefact views
+            renderNFTCollection();
+            renderArtefactsVault();
+            renderStakeHistory();
+            initStakeChart();
+            
+            // Edit name (top bar button)
+            document.getElementById('editNameBtn').addEventListener('click', () => {
+                document.getElementById('newNameInput').value = gameState.username;
+                document.getElementById('editNameModal').classList.remove('hidden');
+            });
+            
+            // Change name (settings dropdown button)
+            document.getElementById('changeNameBtn').addEventListener('click', () => {
+                document.getElementById('newNameInput').value = gameState.username;
+                document.getElementById('editNameModal').classList.remove('hidden');
+            });
+            
+            document.getElementById('cancelEditName').addEventListener('click', () => {
+                document.getElementById('editNameModal').classList.add('hidden');
+            });
+            
+            document.getElementById('saveName').addEventListener('click', () => {
+                const newName = document.getElementById('newNameInput').value.trim();
+                if (newName) {
+                    if (newName !== gameState.username) {
+                        gameState.nameChanges = (gameState.nameChanges || 0) + 1;
+                    }
+                    gameState.username = newName;
+                    saveGame();
+                    updateUI();
+                }
+                document.getElementById('editNameModal').classList.add('hidden');
+            });
+            
+            // Toggles
+            document.getElementById('toggleOffline').addEventListener('click', function() {
+                gameState.settings.offlineProgress = !gameState.settings.offlineProgress;
+                this.classList.toggle('bg-neon-green/30');
+                this.classList.toggle('bg-white/10');
+                this.querySelector('span').classList.toggle('right-1');
+                this.querySelector('span').classList.toggle('left-1');
+                this.querySelector('span').classList.toggle('bg-neon-green');
+                this.querySelector('span').classList.toggle('bg-white/30');
+                saveGame();
+            });
+            
+            document.getElementById('toggleParticles').addEventListener('click', function() {
+                gameState.settings.particles = !gameState.settings.particles;
+                this.classList.toggle('bg-neon-green/30');
+                this.classList.toggle('bg-white/10');
+                this.querySelector('span').classList.toggle('right-1');
+                this.querySelector('span').classList.toggle('left-1');
+                this.querySelector('span').classList.toggle('bg-neon-green');
+                this.querySelector('span').classList.toggle('bg-white/30');
+                saveGame();
+            });
+            
+            // Set initial toggle states
+            if (!gameState.settings.offlineProgress) {
+                document.getElementById('toggleOffline').click();
+            }
+            if (!gameState.settings.particles) {
+                document.getElementById('toggleParticles').click();
+            }
+
+            // ===== MUSIC =====
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.4;
+
+            function applyMusicState() {
+                if (gameState.settings.music) {
+                    bgMusic.play().catch(() => {});
+                } else {
+                    bgMusic.pause();
+                }
+            }
+
+            // Play immediately on any user interaction (covers both returning and new players)
+            const tryStartMusic = () => {
+                applyMusicState();
+                document.removeEventListener('touchstart', tryStartMusic);
+                document.removeEventListener('mousedown', tryStartMusic);
+                document.removeEventListener('click', tryStartMusic);
+            };
+            document.addEventListener('touchstart', tryStartMusic, { once: true });
+            document.addEventListener('mousedown', tryStartMusic, { once: true });
+            document.addEventListener('click', tryStartMusic, { once: true });
+
+            // Also explicitly try on Enter button
+            document.getElementById('enterBtn').addEventListener('click', () => {
+                applyMusicState();
+            });
+
+            // Set initial music toggle visual state
+            if (!gameState.settings.music) {
+                const btn = document.getElementById('toggleMusic');
+                btn.classList.remove('bg-neon-green/30');
+                btn.classList.add('bg-white/10');
+                btn.querySelector('span').classList.remove('right-1', 'bg-neon-green');
+                btn.querySelector('span').classList.add('left-1', 'bg-white/30');
+            }
+
+            document.getElementById('toggleMusic').addEventListener('click', function() {
+                gameState.settings.music = !gameState.settings.music;
+                this.classList.toggle('bg-neon-green/30');
+                this.classList.toggle('bg-white/10');
+                this.querySelector('span').classList.toggle('right-1');
+                this.querySelector('span').classList.toggle('left-1');
+                this.querySelector('span').classList.toggle('bg-neon-green');
+                this.querySelector('span').classList.toggle('bg-white/30');
+                applyMusicState();
+                saveGame();
+            });
+            
+            // Game loop (10x per second)
+            setInterval(() => {
+                const cps = getCPS();
+                const increment = cps / 10;
+                gameState.chills += increment;
+                gameState.totalChills += increment;
+                updateUI();
+                updateMintUI();
+                updateStakeUI();
+            }, 100);
+
+            // Stake chart updates (every 3 seconds)
+            setInterval(updateStakeChart, 3000);
+            
+            // Auto save every 30 seconds
+            setInterval(saveGame, 30000);
+            
+            // Save on tab close
+            window.addEventListener('beforeunload', saveGame);
+            
+            // Visibility change - save on hide
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) saveGame();
+            });
+
+            // Dismiss offline progress on click
+               document.getElementById('offlineProgress').addEventListener('click', () => {
+                document.getElementById('offlineProgress').classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
