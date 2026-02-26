@@ -2,7 +2,7 @@
   "name": "Idle Verse - Chill Verse",
   "short_name": "Idle Verse",
   "description": "An idle clicker game by Chill Verse. Build your HQ, stake Chills, raid rivals, and climb the leaderboard.",
-  "start_url": "./index1-4.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
