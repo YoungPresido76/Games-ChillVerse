@@ -1,0 +1,26 @@
+{
+  "name": "Idle Verse - Chill Verse",
+  "short_name": "Idle Verse",
+  "description": "An idle clicker game by Chill Verse. Build your HQ, stake Chills, raid rivals, and climb the leaderboard.",
+  "start_url": "./index1-4.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#00f3ff",
+  "background_color": "#0a0a1f",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "NFTs/1.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "NFTs/1.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
